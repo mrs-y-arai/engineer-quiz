@@ -2,32 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --white: 255 255 255;
+    --red: 255 0 0;
+    --black: 51 51 51;
+    --strong-gray: 77 77 77;
+    --gray: 128 128 128;
+    --light-gray: 179 179 179;
+
+    --background: var(--white);
+    --foreground: var(--black);
+    --primary: 19 165 60;
+    --primary-foreground: 255 255 255;
+    --destructive: var(--red);
+    --destructive-foreground: 255 255 255;
+    --success: 0 160 0;
+
+    --rounded: 0.5rem;
+  }
+
+  .dark {
+    --white: 255 255 255;
+    --red: 255 0 0;
+    --black: 51 51 51;
+    --strong-gray: 179 179 179;
+    --gray: 128 128 128;
+    --light-gray: 255 255 255;
+
+    --background: var(--black);
+    --foreground: var(--white);
+    --primary: 77 77 255;
+    --primary-foreground: 255 255 255;
+    --ring: var(--primary);
+    --destructive: 255 51 51;
+    --destructive-foreground: 255 255 255;
+    --success: 0 179 0;
+    --error: 255 51 51;
+
+    --rounded: 0.5rem;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer components {
+  .headline {
+    @apply text-2xl font-bold;
   }
 }
