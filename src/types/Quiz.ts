@@ -1,15 +1,7 @@
-export type Answer = {
+import { QuestionList } from '~/types/Question';
+
+export type Quiz = {
   id: number;
-  content: string;
-  isCorrect: boolean;
+  title: string;
+  questionList: QuestionList;
 };
-
-export type AnswerList = Answer[];
-
-export type QuizItem = {
-  id: number;
-  question: string;
-  answerList: AnswerList;
-};
-
-export type QuizList = QuizItem[];

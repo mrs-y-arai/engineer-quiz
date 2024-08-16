@@ -1,121 +1,58 @@
-'use client';
+import { QuizDetailContent } from '~/features/quiz-detail/QuizDetailContent';
+import { QuizService } from '~/server/services/QuizService';
+import { Quiz } from '~/types/Quiz';
+import { snakeToCamel } from '~/utils';
 
-import { CorrectDialog } from '~/components/quiz/CorrectDialog';
-import { InCorrectDialog } from '~/components/quiz/InCorrectDialog';
-import { useQuiz } from '~/hooks/useQuiz';
-import { QuizList } from '~/components/quiz/QuizList';
-import { Button } from '~/components/ui/button';
-import Link from 'next/link';
-
-export default function QuizPage() {
-  const QUESTION_LIST: {
-    id: number;
-    question: string;
-    answerList: {
-      id: number;
-      content: string;
-      isCorrect: boolean;
-    }[];
-  }[] = [
-    {
-      id: 1,
-      question:
-        '問題文1が入ります。問題文が入ります。問題文が入ります。問題文が入ります。問題文が入ります。',
-      answerList: [
-        {
-          id: 1,
-          content: '回答1',
-          isCorrect: false,
-        },
-        {
-          id: 2,
-          content: '回答2',
-          isCorrect: false,
-        },
-        {
-          id: 3,
-          content: '回答3',
-          isCorrect: true,
-        },
-        {
-          id: 4,
-          content: '回答4',
-          isCorrect: false,
-        },
-      ],
-    },
-    {
-      id: 2,
-      question:
-        '問題文2が入ります。問題文が入ります。問題文が入ります。問題文が入ります。問題文が入ります。',
-      answerList: [
-        {
-          id: 1,
-          content: '回答1',
-          isCorrect: true,
-        },
-        {
-          id: 2,
-          content: '回答2',
-          isCorrect: false,
-        },
-        {
-          id: 3,
-          content: '回答3',
-          isCorrect: false,
-        },
-        {
-          id: 4,
-          content: '回答4',
-          isCorrect: false,
-        },
-      ],
-    },
-  ];
-
-  const {
-    handleAnswer,
-    answerList,
-    totalScore,
-    currentQuizCorrectAnswer,
-    isCorrectOpen,
-    setIsCorrectOpen,
-    isInCorrectOpen,
-    setIsInCorrectOpen,
-  } = useQuiz(QUESTION_LIST);
+export default async function QuizDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const quizId = parseInt(params.id, 10);
+  const quiz = await fetchOnRender(quizId);
 
   return (
     <div className="mx-auto max-w-[700px]">
-      <h2 className="headline mb-4 text-center">ミセス検定</h2>
-      <QuizList
-        quizList={QUESTION_LIST}
-        answerList={answerList}
-        handleAnswer={handleAnswer}
-      />
-      {answerList.length === QUESTION_LIST.length ? (
-        <>
-          <p className="mb-4 text-center text-xl font-bold">回答終了!</p>
-          {/* リンクにパラメーターを詰める */}
-          <Link
-            className="mx-auto block w-fit"
-            href={`/result?name=ミセス検定&score=${totalScore}`}
-            prefetch={true}
-          >
-            <Button>結果を見る</Button>
-          </Link>
-        </>
-      ) : null}
-      <CorrectDialog
-        toggleFunction={setIsCorrectOpen}
-        isOpen={isCorrectOpen}
-        isLast={answerList.length === QUESTION_LIST.length}
-      />
-      <InCorrectDialog
-        toggleFunction={setIsInCorrectOpen}
-        isOpen={isInCorrectOpen}
-        correctAnswer={currentQuizCorrectAnswer.content}
-        isLast={answerList.length === QUESTION_LIST.length}
+      <h1 className="headline mb-4 text-center">{quiz.title}</h1>
+      <QuizDetailContent
+        quiz={{
+          id: quiz.id,
+          title: quiz.title,
+        }}
+        questionList={quiz.questionList}
       />
     </div>
   );
+}
+
+/**
+ * ページがレンダリングされるタイミングで発火させるデータ取得処理
+ * @param id
+ */
+async function fetchOnRender(id: number): Promise<Quiz> {
+  const { getQuizWithQuestionsAndOptions } = QuizService();
+  const quiz = await getQuizWithQuestionsAndOptions(id);
+
+  const transformedQuestions = quiz.questions.map((question) => {
+    const transformedOptions = question.options.map((option) => {
+      return {
+        id: option.id,
+        content: option.content,
+        isCorrect: option.is_correct,
+      };
+    });
+    return {
+      id: question.id,
+      content: question.content,
+      optionList: transformedOptions,
+    };
+  });
+
+  const camelCaseQuestions = snakeToCamel(transformedQuestions);
+
+  return {
+    id: quiz.id,
+    title: quiz.title,
+    questionList: camelCaseQuestions,
+  };
 }

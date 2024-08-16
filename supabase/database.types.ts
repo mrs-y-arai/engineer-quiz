@@ -14,27 +14,27 @@ export type Database = {
           content: string
           created_at: string
           id: number
-          isCorrect: boolean
-          quizId: number
+          is_correct: boolean
+          question_id: number
         }
         Insert: {
           content: string
           created_at?: string
           id?: number
-          isCorrect?: boolean
-          quizId: number
+          is_correct?: boolean
+          question_id: number
         }
         Update: {
           content?: string
           created_at?: string
           id?: number
-          isCorrect?: boolean
-          quizId?: number
+          is_correct?: boolean
+          question_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "options_quizId_fkey"
-            columns: ["quizId"]
+            foreignKeyName: "options_question_id_fkey"
+            columns: ["question_id"]
             isOneToOne: false
             referencedRelation: "questions"
             referencedColumns: ["id"]
@@ -46,24 +46,24 @@ export type Database = {
           content: string
           created_at: string
           id: number
-          quizzesId: number
+          quiz_id: number
         }
         Insert: {
           content: string
           created_at?: string
           id?: number
-          quizzesId: number
+          quiz_id: number
         }
         Update: {
           content?: string
           created_at?: string
           id?: number
-          quizzesId?: number
+          quiz_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "questions_quizzesId_fkey"
-            columns: ["quizzesId"]
+            foreignKeyName: "questions_quiz_id_fkey"
+            columns: ["quiz_id"]
             isOneToOne: false
             referencedRelation: "quizzes"
             referencedColumns: ["id"]

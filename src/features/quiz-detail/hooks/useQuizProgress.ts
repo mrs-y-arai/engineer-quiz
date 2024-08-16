@@ -1,10 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { QuizList, Answer } from '~/types/Quiz';
+import { QuestionList as QuestionListType } from '~/types/Question';
+import { Option } from '~/types/Option';
 
-export const useQuiz = (quizList: QuizList) => {
-  const QUIZ_LIST = quizList;
+/**
+ * クイズの回答状況を管理する
+ */
+export const useQuizProgress = (questionList: QuestionListType) => {
+  const QUESTION_LIST = questionList;
 
   /**
    * 回答結果
@@ -17,7 +21,7 @@ export const useQuiz = (quizList: QuizList) => {
    * 現在の問題の正解
    */
   const [currentQuizCorrectAnswer, setCurrentQuizCorrectAnswer] =
-    useState<Answer>({
+    useState<Option>({
       id: 0,
       content: '',
       isCorrect: true,
@@ -49,17 +53,17 @@ export const useQuiz = (quizList: QuizList) => {
     answerId: number;
   }): {
     correct: boolean;
-    correctAnswer: Answer;
+    correctAnswer: Option;
   } => {
     // 答えたクイズを取得
-    const quizTarget = QUIZ_LIST.find((quiz) => quiz.id === params.quizId);
+    const quizTarget = QUESTION_LIST.find((quiz) => quiz.id === params.quizId);
 
     // TODO: あとでエラーハンドリング
     if (!quizTarget) throw new Error('エラー');
 
     // 正誤チェック
-    const correctAnswer = quizTarget.answerList.find(
-      (answer) => answer.isCorrect === true,
+    const correctAnswer = quizTarget.optionList.find(
+      (option) => option.isCorrect === true,
     );
 
     if (!correctAnswer) throw new Error('エラー');
@@ -83,7 +87,8 @@ export const useQuiz = (quizList: QuizList) => {
   const calcTotalScore = () => {
     // 正解した数とクイズの合計数を比較して、正解率を計算。小数点切り上げ
     const totalScore = Math.ceil(
-      (answerList.filter((answer) => answer).length / QUIZ_LIST.length) * 100,
+      (answerList.filter((answer) => answer).length / QUESTION_LIST.length) *
+        100,
     );
     setTotalScore(totalScore);
   };
@@ -101,8 +106,9 @@ export const useQuiz = (quizList: QuizList) => {
       setIsInCorrectOpen(true);
     }
   };
+
   useEffect(() => {
-    if (QUIZ_LIST.length === answerList.length) {
+    if (QUESTION_LIST.length === answerList.length) {
       calcTotalScore();
     }
   }, [answerList.length]);
