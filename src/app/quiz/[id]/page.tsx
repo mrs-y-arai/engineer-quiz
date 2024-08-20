@@ -2,6 +2,7 @@ import { QuizDetailContent } from '~/features/quiz-detail/QuizDetailContent';
 import { QuizService } from '~/server/services/QuizService';
 import { Quiz } from '~/types/Quiz';
 import { snakeToCamel } from '~/utils';
+import { redirect } from 'next/navigation';
 
 export default async function QuizDetailPage({
   params,
@@ -32,6 +33,10 @@ export default async function QuizDetailPage({
 async function fetchOnRender(id: number): Promise<Quiz> {
   const { getQuizWithQuestionsAndOptions } = QuizService();
   const quiz = await getQuizWithQuestionsAndOptions(id);
+
+  if (!quiz) {
+    redirect('/');
+  }
 
   const transformedQuestions = quiz.questions.map((question) => {
     const transformedOptions = question.options.map((option) => {

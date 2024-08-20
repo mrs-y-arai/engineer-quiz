@@ -1,4 +1,5 @@
 import { supabaseServer } from '~/lib/supabase/supabaseServer';
+import { SUPABASE_ERROR_CODE } from '~/constants/supabaseErrorCode';
 
 export const QuizRepository = () => {
   const findById = async (id: number) => {
@@ -9,6 +10,9 @@ export const QuizRepository = () => {
       .single();
 
     if (error) {
+      if (error.code === SUPABASE_ERROR_CODE.NO_DATA) {
+        return null;
+      }
       throw new Error(error.message);
     }
 

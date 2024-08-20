@@ -11,8 +11,12 @@ export const QuizService = () => {
    * クイズ1つ分のまとまりを取得する
    */
   const getQuizWithQuestionsAndOptions = async (id: number) => {
-    const quiz = await quizRepository.findById(id);
-    const questions = await questionRepository.findByQuizId(id);
+    const [quiz, questions] = await Promise.all([
+      quizRepository.findById(id),
+      questionRepository.findByQuizId(id),
+    ]);
+
+    if (!quiz) return null;
 
     const questionWithOptions = await Promise.all(
       questions.map(async (question) => {

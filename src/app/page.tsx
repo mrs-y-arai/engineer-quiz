@@ -1,13 +1,7 @@
 import Link from 'next/link';
 import { Button } from '~/components/ui/button';
-import { QuizService } from '~/server/services/QuizService';
 
-export default async function Home() {
-  const quizService = QuizService();
-
-  const quiz = await quizService.getQuizWithQuestionsAndOptions(1);
-  console.log('quiz', quiz);
-
+export default function Home() {
   return (
     <div>
       <div className="mb-10">
