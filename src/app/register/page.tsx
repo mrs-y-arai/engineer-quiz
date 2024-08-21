@@ -7,6 +7,7 @@ import { customErrorMap } from '~/lib/validation';
 import { z } from 'zod';
 import { useFormState } from 'react-dom';
 import { Label, Input, FormItem, TextArea } from '~/components/Form';
+import { Checkbox } from '~/components/Form/Checkbox';
 
 export default function RegisterPage() {
   z.setErrorMap(customErrorMap);
@@ -56,8 +57,8 @@ export default function RegisterPage() {
           <div className="flex flex-col gap-y-6">
             <p className="-mb-3 text-center text-lg font-bold">問題登録</p>
             {Array.from({ length: questionCount }, (_, index) => (
-              <>
-                <p className="text-center text-base font-bold" key={index}>
+              <div className="flex flex-col gap-y-4" key={index}>
+                <p className="text-center text-base font-bold">
                   {index + 1}問目
                 </p>
                 <FormItem>
@@ -65,7 +66,7 @@ export default function RegisterPage() {
                     label="問題文"
                     htmlFor={`question${index + 1}`}
                     hasError={
-                      !!state.errors?.questions?.[index]?.question?._errors
+                      !!state.errors?.questions?.[index]?.content?._errors
                     }
                   />
                   <TextArea
@@ -73,7 +74,7 @@ export default function RegisterPage() {
                     name="question"
                     id={`question${index + 1}`}
                     errorMessages={
-                      state.errors?.questions?.[index]?.question?._errors
+                      state.errors?.questions?.[index]?.content?._errors
                     }
                   />
                 </FormItem>
@@ -82,7 +83,7 @@ export default function RegisterPage() {
                     label="選択肢1"
                     htmlFor={`option1_${index + 1}`}
                     hasError={
-                      !!state.errors?.questions?.[index]?.optionList?.[0]
+                      !!state.errors?.questions?.[index]?.options?.[0]?.content
                         ?._errors
                     }
                   />
@@ -91,16 +92,36 @@ export default function RegisterPage() {
                     id={`option1_${index + 1}`}
                     name={`option_${index + 1}`}
                     errorMessages={
-                      state.errors?.questions?.[index]?.optionList?.[0]?._errors
+                      state.errors?.questions?.[index]?.options?.[0]?.content
+                        ?._errors
                     }
                   />
+                  <div className="-mt-2 flex items-center">
+                    <Label
+                      className="text-sm"
+                      label="正解の選択肢"
+                      htmlFor={`question_${index + 1}_option_1_check`}
+                      hasError={
+                        !!state.errors?.questions?.[index]?.options?.[0]
+                          ?._errors
+                      }
+                    />
+                    <Checkbox
+                      className="mt-1"
+                      id={`question_${index + 1}_option_1_check`}
+                      name={`question_${index + 1}_option_1_check`}
+                      errorMessages={
+                        state.errors?.questions?.[index]?.options?.[0]?._errors
+                      }
+                    />
+                  </div>
                 </FormItem>
                 <FormItem>
                   <Label
                     label="選択肢2"
                     htmlFor={`option2_${index + 1}`}
                     hasError={
-                      !!state.errors?.questions?.[index]?.optionList?.[1]
+                      !!state.errors?.questions?.[index]?.options?.[1]?.content
                         ?._errors
                     }
                   />
@@ -109,16 +130,36 @@ export default function RegisterPage() {
                     id={`option2_${index + 1}`}
                     name={`option_${index + 1}`}
                     errorMessages={
-                      state.errors?.questions?.[index]?.optionList?.[1]?._errors
+                      state.errors?.questions?.[index]?.options?.[1]?.content
+                        ?._errors
                     }
                   />
+                  <div className="-mt-2 flex items-center">
+                    <Label
+                      className="text-sm"
+                      label="正解の選択肢"
+                      htmlFor={`question_${index + 1}_option_2_check`}
+                      hasError={
+                        !!state.errors?.questions?.[index]?.options?.[1]
+                          ?._errors
+                      }
+                    />
+                    <Checkbox
+                      className="mt-1"
+                      id={`question_${index + 1}_option_2_check`}
+                      name={`question_${index + 1}_option_2_check`}
+                      errorMessages={
+                        state.errors?.questions?.[index]?.options?.[1]?._errors
+                      }
+                    />
+                  </div>
                 </FormItem>
                 <FormItem>
                   <Label
                     label="選択肢3"
                     htmlFor={`option3_${index + 1}`}
                     hasError={
-                      !!state.errors?.questions?.[index]?.optionList?.[2]
+                      !!state.errors?.questions?.[index]?.options?.[2]?.content
                         ?._errors
                     }
                   />
@@ -127,16 +168,36 @@ export default function RegisterPage() {
                     id={`option3_${index + 1}`}
                     name={`option_${index + 1}`}
                     errorMessages={
-                      state.errors?.questions?.[index]?.optionList?.[2]?._errors
+                      state.errors?.questions?.[index]?.options?.[2]?.content
+                        ?._errors
                     }
                   />
+                  <div className="-mt-2 flex items-center">
+                    <Label
+                      className="text-sm"
+                      label="正解の選択肢"
+                      htmlFor={`question_${index + 1}_option_3_check`}
+                      hasError={
+                        !!state.errors?.questions?.[index]?.options?.[2]
+                          ?._errors
+                      }
+                    />
+                    <Checkbox
+                      className="mt-1"
+                      id={`question_${index + 1}_option_3_check`}
+                      name={`question_${index + 1}_option_3_check`}
+                      errorMessages={
+                        state.errors?.questions?.[index]?.options?.[2]?._errors
+                      }
+                    />
+                  </div>
                 </FormItem>
                 <FormItem>
                   <Label
                     label="選択肢4"
                     htmlFor={`option4_${index + 1}`}
                     hasError={
-                      !!state.errors?.questions?.[index]?.optionList?.[3]
+                      !!state.errors?.questions?.[index]?.options?.[3]?.content
                         ?._errors
                     }
                   />
@@ -145,11 +206,31 @@ export default function RegisterPage() {
                     id={`option4_${index + 1}`}
                     name={`option_${index + 1}`}
                     errorMessages={
-                      state.errors?.questions?.[index]?.optionList?.[3]?._errors
+                      state.errors?.questions?.[index]?.options?.[3]?.content
+                        ?._errors
                     }
                   />
+                  <div className="-mt-2 flex items-center">
+                    <Label
+                      className="text-sm"
+                      label="正解の選択肢"
+                      htmlFor={`question_${index + 1}_option_4_check`}
+                      hasError={
+                        !!state.errors?.questions?.[index]?.options?.[3]
+                          ?._errors
+                      }
+                    />
+                    <Checkbox
+                      className="mt-1"
+                      id={`question_${index + 1}_option_4_check`}
+                      name={`question_${index + 1}_option_4_check`}
+                      errorMessages={
+                        state.errors?.questions?.[index]?.options?.[3]?._errors
+                      }
+                    />
+                  </div>
                 </FormItem>
-              </>
+              </div>
             ))}
             <Button
               onClick={addQuestion}

@@ -9,9 +9,11 @@
     "build:start": "next build && next start",
     "lint": "next lint; prettier --check .",
     "format": "next lint --fix && prettier --write .",
+    "typecheck": "tsc --noEmit",
     "gen-schema": "supabase gen types typescript --project-id otesfyhmjtmofknfezrz --schema public > supabase/database.types.ts"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@supabase/supabase-js": "^2.45.1",

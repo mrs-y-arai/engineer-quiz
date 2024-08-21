@@ -4,4 +4,4 @@ export type Option = {
   isCorrect: boolean;
 };
 
-export type OptionList = Option[];
+export type Options = Option[];

@@ -37,7 +37,51 @@ export const QuizService = () => {
     };
   };
 
+  /**
+   * クイズ1つ分のまとまりを作成する
+   */
+  const createQuizWithQuestionsAndOptions = async (params: {
+    title: string;
+    description: string;
+    questions: {
+      content: string;
+      options: {
+        content: string;
+        isCorrect: boolean;
+      }[];
+    }[];
+  }) => {
+    const quiz = await quizRepository.create({
+      title: params.title,
+      description: params.description,
+    });
+
+    await Promise.all(
+      params.questions.map(async (question) => {
+        const resultQuestion = await questionRepository.create({
+          content: question.content,
+          quiz_id: quiz.id,
+        });
+
+        await Promise.all(
+          question.options.map(async (option) => {
+            await optionRepository.create({
+              content: option.content,
+              is_correct: option.isCorrect,
+              question_id: resultQuestion.id,
+            });
+          }),
+        );
+      }),
+    );
+
+    return {
+      ok: true,
+    };
+  };
+
   return {
     getQuizWithQuestionsAndOptions,
+    createQuizWithQuestionsAndOptions,
   };
 };

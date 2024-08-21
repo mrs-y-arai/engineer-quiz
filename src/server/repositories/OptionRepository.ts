@@ -1,4 +1,5 @@
 import { supabaseServer } from '~/lib/supabase/supabaseServer';
+import { type TablesInsert } from '~/../supabase/database.types';
 
 export const OptionRepository = () => {
   const findById = async (id: number) => {
@@ -38,9 +39,26 @@ export const OptionRepository = () => {
     return data;
   };
 
+  const create = async (value: TablesInsert<'options'>) => {
+    const { data, error } = await supabaseServer
+      .from('options')
+      .insert({
+        ...value,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
+  };
+
   return {
     findById,
     findByQuestionId,
     findAll,
+    create,
   };
 };

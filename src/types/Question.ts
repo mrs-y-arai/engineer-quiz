@@ -1,9 +1,9 @@
-import { OptionList } from '~/types/Option';
+import { Options } from '~/types/Option';
 
 export type QuestionItem = {
   id: number;
   content: string;
-  optionList: OptionList;
+  options: Options;
 };
 
-export type QuestionList = QuestionItem[];
+export type Questions = QuestionItem[];

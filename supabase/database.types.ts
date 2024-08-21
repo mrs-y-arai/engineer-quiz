@@ -73,19 +73,19 @@ export type Database = {
       quizzes: {
         Row: {
           created_at: string
-          description: string | null
+          description: string
           id: number
           title: string
         }
         Insert: {
           created_at?: string
-          description?: string | null
+          description: string
           id?: number
           title: string
         }
         Update: {
           created_at?: string
-          description?: string | null
+          description?: string
           id?: number
           title?: string
         }

@@ -3,39 +3,39 @@
 import { CorrectDialog } from './components/CorrectDialog';
 import { InCorrectDialog } from './components/InCorrectDialog';
 import { useQuizProgress } from './hooks/useQuizProgress';
-import { QuestionList } from './components/QuestionList';
+import { Questions } from './components/Questions';
 import { Button } from '~/components/ui/button';
 import Link from 'next/link';
-import { QuestionList as QuestionListType } from '~/types/Question';
+import { Questions as QuestionsType } from '~/types/Question';
 
 type Props = {
   quiz: {
     id: number;
     title: string;
   };
-  questionList: QuestionListType;
+  questions: QuestionsType;
 };
 
-export function QuizDetailContent({ questionList, quiz }: Props) {
+export function QuizDetailContent({ questions, quiz }: Props) {
   const {
     handleAnswer,
-    answerList,
+    answers,
     totalScore,
     currentQuizCorrectAnswer,
     isCorrectOpen,
     setIsCorrectOpen,
     isInCorrectOpen,
     setIsInCorrectOpen,
-  } = useQuizProgress(questionList);
+  } = useQuizProgress(questions);
 
   return (
     <>
-      <QuestionList
-        questionList={questionList}
-        answerList={answerList}
+      <Questions
+        questions={questions}
+        answers={answers}
         handleAnswer={handleAnswer}
       />
-      {answerList.length === questionList.length ? (
+      {answers.length === questions.length ? (
         <>
           <p className="mb-4 text-center text-xl font-bold">回答終了!</p>
           {/* リンクにパラメーターを詰める */}
@@ -51,13 +51,13 @@ export function QuizDetailContent({ questionList, quiz }: Props) {
       <CorrectDialog
         toggleFunction={setIsCorrectOpen}
         isOpen={isCorrectOpen}
-        isLast={answerList.length === questionList.length}
+        isLast={answers.length === questions.length}
       />
       <InCorrectDialog
         toggleFunction={setIsInCorrectOpen}
         isOpen={isInCorrectOpen}
         correctAnswer={currentQuizCorrectAnswer.content}
-        isLast={answerList.length === questionList.length}
+        isLast={answers.length === questions.length}
       />
     </>
   );

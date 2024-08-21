@@ -20,7 +20,7 @@ export default async function QuizDetailPage({
           id: quiz.id,
           title: quiz.title,
         }}
-        questionList={quiz.questionList}
+        questions={quiz.questions}
       />
     </div>
   );
@@ -49,7 +49,7 @@ async function fetchOnRender(id: number): Promise<Quiz> {
     return {
       id: question.id,
       content: question.content,
-      optionList: transformedOptions,
+      options: transformedOptions,
     };
   });
 
@@ -58,6 +58,6 @@ async function fetchOnRender(id: number): Promise<Quiz> {
   return {
     id: quiz.id,
     title: quiz.title,
-    questionList: camelCaseQuestions,
+    questions: camelCaseQuestions,
   };
 }

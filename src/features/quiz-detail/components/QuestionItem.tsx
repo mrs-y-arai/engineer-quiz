@@ -10,7 +10,7 @@ export function QuestionItem({
   id,
   index,
   content,
-  optionList,
+  options,
   handleAnswer,
 }: Props) {
   return (
@@ -22,7 +22,7 @@ export function QuestionItem({
         <p className="pt-1.5 text-center text-xl font-bold">{content}</p>
       </div>
       <div className="flex flex-col gap-y-4">
-        {optionList.map((option) => {
+        {options.map((option) => {
           return (
             <Button
               key={option.content}

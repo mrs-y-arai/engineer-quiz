@@ -1,23 +1,19 @@
-import { QuestionList as QuestionListType } from '~/types/Question';
+import { Questions as QuestionsType } from '~/types/Question';
 import { QuestionItem } from './QuestionItem';
 
 type Props = {
-  questionList: QuestionListType;
-  answerList: boolean[];
+  questions: QuestionsType;
+  answers: boolean[];
   handleAnswer: (params: { quizId: number; answerId: number }) => void;
 };
 
-export function QuestionList({
-  questionList,
-  answerList,
-  handleAnswer,
-}: Props) {
+export function Questions({ questions, answers, handleAnswer }: Props) {
   return (
     <div>
-      {questionList.map((item, index) => {
+      {questions.map((item, index) => {
         return (
           <div key={index}>
-            {answerList.length === index ? (
+            {answers.length === index ? (
               <QuestionItem
                 {...item}
                 index={index}
