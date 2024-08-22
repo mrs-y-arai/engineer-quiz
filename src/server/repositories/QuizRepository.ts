@@ -20,8 +20,11 @@ export const QuizRepository = () => {
     return data;
   };
 
-  const findAll = async () => {
-    const { data, error } = await supabaseServer.from('quizzes').select('*');
+  const findAll = async (limit: number = 10) => {
+    const { data, error } = await supabaseServer
+      .from('quizzes')
+      .select('*')
+      .limit(limit);
 
     if (error) {
       throw new Error(error.message);

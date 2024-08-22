@@ -31,7 +31,7 @@ export function InCorrectDialog({
         </DialogHeader>
         <DialogFooter>
           <Button onClick={() => toggleFunction(false)}>
-            {isLast ? '結果へ' : '次の問題へ'}
+            {isLast ? '閉じる' : '次の問題へ'}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '~/lib/utils';
 
 const buttonVariants = cva(
-  'flex items-center justify-center whitespace-nowrap rounded-sm text-sm font-bold transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+  'flex items-center justify-center whitespace-nowrap rounded-sm text-sm font-bold transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-gray-light',
   {
     variants: {
       variant: {
@@ -34,17 +34,32 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  isProcessing?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  (
+    {
+      className,
+      variant,
+      isProcessing = false,
+      size,
+      children,
+      asChild = false,
+      ...props
+    },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : 'button';
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-      />
+        disabled={isProcessing}
+      >
+        {isProcessing ? '処理中...' : children}
+      </Comp>
     );
   },
 );

@@ -21,7 +21,6 @@ export function Checkbox({ errorMessages, ...props }: CheckboxProps) {
           <div
             key={index}
             className="mt-2 text-sm text-destructive"
-            id="name-error"
             aria-live="polite"
           >
             {error}

@@ -77,6 +77,7 @@ export const QuizService = () => {
 
     return {
       ok: true,
+      id: quiz.id,
     };
   };
 

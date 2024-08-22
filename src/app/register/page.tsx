@@ -1,13 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { createQuestion } from '~/actions/createQuestion';
 import { customErrorMap } from '~/lib/validation';
 import { z } from 'zod';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { Label, Input, FormItem, TextArea } from '~/components/Form';
 import { Checkbox } from '~/components/Form/Checkbox';
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '~/components/ui/dialog';
 
 export default function RegisterPage() {
   z.setErrorMap(customErrorMap);
@@ -17,15 +24,22 @@ export default function RegisterPage() {
   };
   const [state, dispatch] = useFormState(createQuestion, initialState);
   const [questionCount, setQuestionCount] = useState(1);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const addQuestion = () => {
     setQuestionCount((prevCount) => prevCount + 1);
   };
 
+  useEffect(() => {
+    if (state.createdQuizId) {
+      setIsDialogOpen(true);
+    }
+  }, [state.createdQuizId]);
+
   return (
     <div>
       <h1 className="mb-4 text-center text-2xl font-bold">クイズ作成</h1>
-      <form action={dispatch}>
+      <form action={(formData) => dispatch(formData)}>
         <div className="flex flex-col gap-y-8">
           <p className="-mb-6 text-center text-lg font-bold">基本情報</p>
           <FormItem>
@@ -96,9 +110,9 @@ export default function RegisterPage() {
                         ?._errors
                     }
                   />
-                  <div className="-mt-2 flex items-center">
+                  <div className="-mt-2 flex items-center md:mt-0">
                     <Label
-                      className="text-sm"
+                      className="mt-0 text-sm"
                       label="正解の選択肢"
                       htmlFor={`question_${index + 1}_option_1_check`}
                       hasError={
@@ -107,11 +121,12 @@ export default function RegisterPage() {
                       }
                     />
                     <Checkbox
-                      className="mt-1"
+                      className="mt-1.5"
                       id={`question_${index + 1}_option_1_check`}
                       name={`question_${index + 1}_option_1_check`}
                       errorMessages={
-                        state.errors?.questions?.[index]?.options?.[0]?._errors
+                        state.errors?.questions?.[index]?.options?.[0]
+                          ?.isCorrect?._errors
                       }
                     />
                   </div>
@@ -134,9 +149,9 @@ export default function RegisterPage() {
                         ?._errors
                     }
                   />
-                  <div className="-mt-2 flex items-center">
+                  <div className="-mt-2 flex items-center md:mt-0">
                     <Label
-                      className="text-sm"
+                      className="mt-0 text-sm"
                       label="正解の選択肢"
                       htmlFor={`question_${index + 1}_option_2_check`}
                       hasError={
@@ -145,7 +160,7 @@ export default function RegisterPage() {
                       }
                     />
                     <Checkbox
-                      className="mt-1"
+                      className="mt-1.5"
                       id={`question_${index + 1}_option_2_check`}
                       name={`question_${index + 1}_option_2_check`}
                       errorMessages={
@@ -172,9 +187,9 @@ export default function RegisterPage() {
                         ?._errors
                     }
                   />
-                  <div className="-mt-2 flex items-center">
+                  <div className="-mt-2 flex items-center md:mt-0">
                     <Label
-                      className="text-sm"
+                      className="mt-0 text-sm"
                       label="正解の選択肢"
                       htmlFor={`question_${index + 1}_option_3_check`}
                       hasError={
@@ -183,7 +198,7 @@ export default function RegisterPage() {
                       }
                     />
                     <Checkbox
-                      className="mt-1"
+                      className="mt-1.5"
                       id={`question_${index + 1}_option_3_check`}
                       name={`question_${index + 1}_option_3_check`}
                       errorMessages={
@@ -210,9 +225,9 @@ export default function RegisterPage() {
                         ?._errors
                     }
                   />
-                  <div className="-mt-2 flex items-center">
+                  <div className="-mt-2 flex items-center md:mt-0">
                     <Label
-                      className="text-sm"
+                      className="mt-0 text-sm"
                       label="正解の選択肢"
                       htmlFor={`question_${index + 1}_option_4_check`}
                       hasError={
@@ -221,7 +236,7 @@ export default function RegisterPage() {
                       }
                     />
                     <Checkbox
-                      className="mt-1"
+                      className="mt-1.5"
                       id={`question_${index + 1}_option_4_check`}
                       name={`question_${index + 1}_option_4_check`}
                       errorMessages={
@@ -241,11 +256,37 @@ export default function RegisterPage() {
               問題追加
             </Button>
           </div>
-          <Button className="mx-auto mt-4 w-[200px]" type="submit">
-            作成
-          </Button>
+          <SubmitButton />
         </div>
       </form>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="min-h-[40svh]">
+          <DialogHeader>
+            <DialogTitle className="text-center">クイズ作成完了！</DialogTitle>
+          </DialogHeader>
+          <div className="text-center">
+            <p>クイズの作成、ありがとうございます！</p>
+            <p>SNSなどで、友達にシェアしよう！</p>
+            <p className="my-4 block underline">
+              {`${window.location.origin}/quiz/${state.createdQuizId}`}
+            </p>
+            <Button className="mx-auto">SNSでシェア</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      className="mx-auto mt-4 w-[200px]"
+      type="submit"
+      isProcessing={pending}
+    >
+      作成
+    </Button>
   );
 }

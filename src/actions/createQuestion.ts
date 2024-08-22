@@ -4,6 +4,8 @@ import { QuizService } from '~/server/services/QuizService';
 
 type State = {
   message: string | null;
+  isSuccess?: boolean;
+  createdQuizId?: number;
   errors?: ZodFormattedError<
     {
       title: string;
@@ -26,6 +28,7 @@ const schema = z.object({
   questions: z
     .object({
       content: z.string().min(1, { message: '問題文は必須です' }),
+      // TODO: 以下のバリデーションがうまくいかない
       options: z
         .object({
           content: z.string().min(1, { message: '選択肢は必須です' }),
@@ -56,10 +59,12 @@ export const createQuestion = async (
   formData: FormData,
 ): Promise<State> => {
   const questionsFormData = formData.getAll('question');
-  const mappedQuestions = questionsFormData.map((question, index) => {
-    const options = formData.getAll(`option_${index + 1}`);
-    const mappedOptions = options.map((option, index) => {
-      const optionCheck = formData.get(`question_${index + 1}_option_1_check`);
+  const mappedQuestions = questionsFormData.map((question, questionIndex) => {
+    const options = formData.getAll(`option_${questionIndex + 1}`);
+    const mappedOptions = options.map((option, optionIndex) => {
+      const optionCheck = formData.get(
+        `question_${questionIndex + 1}_option_${optionIndex}_check`,
+      );
       return {
         content: option,
         isCorrect: optionCheck,
@@ -89,11 +94,11 @@ export const createQuestion = async (
   }
 
   const { createQuizWithQuestionsAndOptions } = QuizService();
-  await createQuizWithQuestionsAndOptions({
+  const result = await createQuizWithQuestionsAndOptions({
     title: validatedFields.data.title,
     description: validatedFields.data.description,
     questions: validatedFields.data.questions,
   });
 
-  return { message: 'Success' };
+  return { message: 'Success', isSuccess: true, createdQuizId: result.id };
 };
