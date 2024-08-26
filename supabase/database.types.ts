@@ -9,6 +9,24 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      categories: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
       options: {
         Row: {
           content: string
@@ -90,6 +108,42 @@ export type Database = {
           title?: string
         }
         Relationships: []
+      }
+      quizzes_categories_relationships: {
+        Row: {
+          category_id: number
+          created_at: string
+          id: number
+          quiz_id: number
+        }
+        Insert: {
+          category_id: number
+          created_at?: string
+          id?: number
+          quiz_id: number
+        }
+        Update: {
+          category_id?: number
+          created_at?: string
+          id?: number
+          quiz_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quizzes_categories_ relationship_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quizzes_categories_ relationship_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

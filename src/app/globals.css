@@ -9,7 +9,7 @@
     --black: 51 51 51;
     --strong-gray: 77 77 77;
     --gray: 128 128 128;
-    --light-gray: 179 179 179;
+    --light-gray: 230 230 230;
 
     --background: var(--white);
     --foreground: var(--black);
@@ -18,27 +18,6 @@
     --destructive: var(--red);
     --destructive-foreground: 255 255 255;
     --success: 0 160 0;
-
-    --rounded: 0.5rem;
-  }
-
-  .dark {
-    --white: 255 255 255;
-    --red: 255 0 0;
-    --black: 51 51 51;
-    --strong-gray: 179 179 179;
-    --gray: 128 128 128;
-    --light-gray: 255 255 255;
-
-    --background: var(--black);
-    --foreground: var(--white);
-    --primary: 77 77 255;
-    --primary-foreground: 255 255 255;
-    --ring: var(--primary);
-    --destructive: 255 51 51;
-    --destructive-foreground: 255 255 255;
-    --success: 0 179 0;
-    --error: 255 51 51;
 
     --rounded: 0.5rem;
   }

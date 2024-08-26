@@ -1,11 +1,13 @@
 import { QuizRepository } from '../repositories/QuizRepository';
 import { QuestionRepository } from '../repositories/QuestionRepository';
 import { OptionRepository } from '../repositories/OptionRepository';
+import { QuizCategoryRelationship } from '../repositories/QuizCategoryRelationship';
 
 export const QuizService = () => {
   const quizRepository = QuizRepository();
   const questionRepository = QuestionRepository();
   const optionRepository = OptionRepository();
+  const quizCategoryRelationship = QuizCategoryRelationship();
 
   /**
    * クイズ1つ分のまとまりを取得する
@@ -50,14 +52,15 @@ export const QuizService = () => {
         isCorrect: boolean;
       }[];
     }[];
+    categoryId?: number;
   }) => {
     const quiz = await quizRepository.create({
       title: params.title,
       description: params.description,
     });
 
-    await Promise.all(
-      params.questions.map(async (question) => {
+    await Promise.all([
+      ...params.questions.map(async (question) => {
         const resultQuestion = await questionRepository.create({
           content: question.content,
           quiz_id: quiz.id,
@@ -73,7 +76,10 @@ export const QuizService = () => {
           }),
         );
       }),
-    );
+      params.categoryId
+        ? quizCategoryRelationship.create(quiz.id, params.categoryId)
+        : null,
+    ]);
 
     return {
       ok: true,

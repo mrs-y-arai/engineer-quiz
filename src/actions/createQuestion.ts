@@ -1,3 +1,5 @@
+// TODO: カテゴリIDのデータがうまく取れていない。
+
 'use server';
 import { z, type ZodFormattedError } from 'zod';
 import { QuizService } from '~/server/services/QuizService';
@@ -30,28 +32,29 @@ const schema = z.object({
       content: z.string().min(1, { message: '問題文は必須です' }),
       // TODO: 以下のバリデーションがうまくいかない
       options: z
-        .object({
-          content: z.string().min(1, { message: '選択肢は必須です' }),
-          isCorrect: z
-            .enum(['on'])
-            .nullable()
-            .transform((value) => value === 'on'),
-        })
-        .array()
-        .nonempty({ message: '選択肢は最低1つ以上必要です' })
+        .array(
+          z.object({
+            content: z.string().min(1, { message: '選択肢は必須です' }),
+            isCorrect: z
+              .enum(['on'])
+              .nullable()
+              .transform((value) => value === 'on'),
+          }),
+        )
         .superRefine((val, ctx) => {
-          const isCorrectCount =
-            val.filter((option) => option.isCorrect).length === 1;
-          if (!isCorrectCount) {
+          const isCorrectCount = val.filter((option) => option.isCorrect);
+          if (isCorrectCount.length !== 1) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
-              message: '正解の選択肢は1つだけです',
+              message: '正解の選択肢を1つ選択してください',
             });
+            return;
           }
         }),
     })
     .array()
     .nonempty({ message: '問題は最低1つ以上必要です' }),
+  categoryId: z.number().optional(),
 });
 
 export const createQuestion = async (
@@ -63,7 +66,7 @@ export const createQuestion = async (
     const options = formData.getAll(`option_${questionIndex + 1}`);
     const mappedOptions = options.map((option, optionIndex) => {
       const optionCheck = formData.get(
-        `question_${questionIndex + 1}_option_${optionIndex}_check`,
+        `question_${questionIndex + 1}_option_${optionIndex + 1}_check`,
       );
       return {
         content: option,
@@ -77,11 +80,16 @@ export const createQuestion = async (
     };
   });
 
+  const categoryId = formData.get('categoryId')
+    ? Number(formData.get('categoryId'))
+    : undefined;
+
   // ユーザースキーマによるバリデーション
   const validatedFields = schema.safeParse({
     title: formData.get('title'),
     description: formData.get('description'),
     questions: mappedQuestions,
+    categoryId,
   });
 
   if (!validatedFields.success) {
@@ -98,6 +106,7 @@ export const createQuestion = async (
     title: validatedFields.data.title,
     description: validatedFields.data.description,
     questions: validatedFields.data.questions,
+    categoryId: validatedFields.data.categoryId,
   });
 
   return { message: 'Success', isSuccess: true, createdQuizId: result.id };

@@ -67,6 +67,9 @@ const config = {
       },
       zIndex: {
         loading: '9999',
+        menu: '9000',
+        'menu-overlay': '8500',
+        'fixed-menu': '8000',
       },
     },
   },
