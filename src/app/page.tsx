@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { QuizRepository } from '~/server/repositories/QuizRepository';
-import { Quiz } from '~/types/Quiz';
+import { QuizList } from '~/types/Quiz';
+import { Button } from '~/components/ui/button';
+import { QuizService } from '~/server/services/QuizService';
 
 export default async function Home() {
   const quizzes = await fetchOnRender();
@@ -9,15 +10,19 @@ export default async function Home() {
     <div>
       <div className="mb-10">
         <h1 className="mb-4 text-center text-2xl font-bold">
-          みんなのエンジニア検定
+          みんなのエンジニアクイズ
         </h1>
         <p className="mb-4 text-center text-base font-bold leading-relaxed">
-          エンジニアクイズを解いて、自分の力を試してみよう！
+          エンジニアクイズを解いて、
+          <br className="block md:hidden" />
+          自分の力を試してみよう！
           <br />
-          自分でクイズを作って、みんなに共有することもできるよ！
+          自分でクイズを作って、
+          <br className="block md:hidden" />
+          みんなに共有することもできるよ！
         </p>
       </div>
-      <section className="py-4">
+      <section className="py-4" id="quiz-list">
         <h2 className="mb-3 text-center text-xl font-bold">
           今まで作ったクイズたち
         </h2>
@@ -28,11 +33,12 @@ export default async function Home() {
                 return (
                   <li key={quiz.id} className="border-b">
                     <Link
-                      className="block p-4 duration-200 hover:bg-primary/5"
+                      className="flex items-center justify-between p-4 duration-200 hover:bg-primary/5"
                       href={`/quiz/${quiz.id}`}
                       prefetch={true}
                     >
                       {quiz.title}
+                      {quiz.category && <p>#{quiz.category.name}</p>}
                     </Link>
                   </li>
                 );
@@ -43,18 +49,18 @@ export default async function Home() {
           <p className="text-center">クイズがありません</p>
         )}
       </section>
+      <section className="py-4">
+        <h2 className="mb-4 text-center text-xl font-bold">クイズを作る</h2>
+        <Link href="/register" prefetch={true} className="mx-auto block w-fit">
+          <Button>クイズを作る</Button>
+        </Link>
+      </section>
     </div>
   );
 }
 
-async function fetchOnRender(): Promise<Omit<Quiz, 'questions'>[]> {
-  const quizRepository = QuizRepository();
-  const quizzes = await quizRepository.findAll();
-  const quizzesWithoutQuestions = quizzes.map((quiz) => {
-    return {
-      id: quiz.id,
-      title: quiz.title,
-    };
-  });
-  return quizzesWithoutQuestions;
+async function fetchOnRender(): Promise<QuizList> {
+  const quizService = QuizService();
+  const quizzes = await quizService.getAllQuizWithCategory();
+  return quizzes;
 }

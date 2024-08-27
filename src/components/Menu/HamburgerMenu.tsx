@@ -50,13 +50,13 @@ export function HamburgerMenu({ className }: { className?: string }) {
       <div
         onClick={closeMenu}
         className={cn(
-          `z-menu-overlay fixed left-0 top-0 h-screen w-screen bg-gray-strong/50 transition-all duration-500`,
+          `fixed left-0 top-0 z-menu-overlay h-screen w-screen bg-gray-strong/50 transition-all duration-500`,
           isOpen ? 'visible translate-x-0' : 'invisible -translate-x-full',
         )}
       ></div>
       <div
         className={cn(
-          'z-menu fixed right-0 top-0 block h-screen w-72 transform bg-gray-strong p-4 pt-10 text-white transition-all duration-500',
+          'fixed right-0 top-0 z-menu block h-screen w-72 transform bg-gray-strong p-4 pt-10 text-white transition-all duration-500',
           isOpen ? 'visible translate-x-0' : 'invisible translate-x-full',
         )}
       >
@@ -88,6 +88,14 @@ export function HamburgerMenu({ className }: { className?: string }) {
             href="/register"
           >
             クイズを作る
+          </Link>
+          <Link
+            prefetch={true}
+            onClick={closeMenu}
+            className="text-white"
+            href="/#quiz-list"
+          >
+            クイズ一覧
           </Link>
         </div>
       </div>

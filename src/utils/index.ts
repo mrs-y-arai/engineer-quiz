@@ -28,3 +28,13 @@ export function snakeToCamel<T>(obj: T): T {
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function generateXShareUrl(params: { text: string; path: string }) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  return `https://twitter.com/intent/tweet?text=${params.text}&url=${baseUrl}${params.path}&hashtags=エンジニアクイズ`;
+}
+
+export function generateLineShareUrl(params: { text: string; path: string }) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  return `https://line.me/R/msg/text/?${params.text}%20${baseUrl}${params.path}`;
+}

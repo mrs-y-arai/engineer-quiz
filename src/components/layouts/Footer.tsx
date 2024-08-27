@@ -10,7 +10,7 @@ export function Footer() {
 
   return (
     <>
-      <footer className="border-t px-5 py-3 text-center">
+      <footer className="border-t px-5 pb-20 pt-3 text-center">
         <small>&copy; {copyRightYear()} Yuki Arai</small>
       </footer>
     </>

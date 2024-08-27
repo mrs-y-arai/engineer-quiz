@@ -6,18 +6,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from '~/components/ui/dialog';
-import { Button } from '~/components/ui/button';
+import { SnsShare } from '~/components/SnsShare';
+import Link from 'next/link';
 
 type Props = {
   isDialogOpen: boolean;
   setIsDialogOpen: (isDialogOpen: boolean) => void;
-  createdQuizId?: number;
+  createdQuiz?: {
+    id: number;
+    title: string;
+  };
 };
 
 export function CompleteDialog({
   isDialogOpen,
   setIsDialogOpen,
-  createdQuizId,
+  createdQuiz,
 }: Props) {
   if (typeof window === 'undefined') return null;
 
@@ -30,10 +34,22 @@ export function CompleteDialog({
         <div className="text-center">
           <p>クイズの作成、ありがとうございます！</p>
           <p>SNSなどで、友達にシェアしよう！</p>
-          <p className="my-4 block underline">
-            クイズURL: {`${window.location.origin}/quiz/${createdQuizId}`}
-          </p>
-          <Button className="mx-auto">SNSでシェア</Button>
+          {createdQuiz && (
+            <>
+              <Link
+                href={`/quiz/${createdQuiz.id}`}
+                className="my-4 block underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                クイズURL: {`${window.location.origin}/quiz/${createdQuiz.id}`}
+              </Link>
+              <SnsShare
+                text={`エンジニアクイズを作りました！${createdQuiz?.title}に挑戦しよう！`}
+                path={`/quiz/${createdQuiz?.id}`}
+              />
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

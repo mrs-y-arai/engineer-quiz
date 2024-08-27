@@ -1,13 +1,18 @@
 import { QuizRepository } from '../repositories/QuizRepository';
 import { QuestionRepository } from '../repositories/QuestionRepository';
 import { OptionRepository } from '../repositories/OptionRepository';
-import { QuizCategoryRelationship } from '../repositories/QuizCategoryRelationship';
+import { QuizCategoryRelationshipsRepository } from '../repositories/QuizCategoryRelationshipsRepository';
+import { CategoryRepository } from '../repositories/CategoryRepository';
+import { type QuizList } from '~/types/Quiz';
+import { revalidatePath } from 'next/cache';
 
 export const QuizService = () => {
   const quizRepository = QuizRepository();
   const questionRepository = QuestionRepository();
   const optionRepository = OptionRepository();
-  const quizCategoryRelationship = QuizCategoryRelationship();
+  const quizCategoryRelationshipsRepository =
+    QuizCategoryRelationshipsRepository();
+  const categoryRepository = CategoryRepository();
 
   /**
    * クイズ1つ分のまとまりを取得する
@@ -77,18 +82,58 @@ export const QuizService = () => {
         );
       }),
       params.categoryId
-        ? quizCategoryRelationship.create(quiz.id, params.categoryId)
+        ? quizCategoryRelationshipsRepository.create(quiz.id, params.categoryId)
         : null,
     ]);
 
     return {
       ok: true,
       id: quiz.id,
+      title: quiz.title,
     };
+  };
+
+  /**
+   * クイズを取得する
+   */
+  const getAllQuizWithCategory = async (): Promise<QuizList> => {
+    revalidatePath('/');
+
+    const quizzes = await quizRepository.findAll();
+
+    const quizzesWithCategory = await Promise.all(
+      quizzes.map(async (quiz) => {
+        const quizCategoryRelationship =
+          await quizCategoryRelationshipsRepository.findByQuizId(quiz.id);
+
+        if (quizCategoryRelationship) {
+          const category = await categoryRepository.findById(
+            quizCategoryRelationship.category_id,
+          );
+          return {
+            id: quiz.id,
+            title: quiz.title,
+            category: {
+              id: category.id,
+              name: category.name,
+            },
+          };
+        }
+
+        return {
+          id: quiz.id,
+          title: quiz.title,
+          category: null,
+        };
+      }),
+    );
+
+    return quizzesWithCategory;
   };
 
   return {
     getQuizWithQuestionsAndOptions,
     createQuizWithQuestionsAndOptions,
+    getAllQuizWithCategory,
   };
 };

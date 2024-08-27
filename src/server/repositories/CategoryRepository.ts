@@ -14,5 +14,19 @@ export const CategoryRepository = () => {
     return data;
   };
 
-  return { findAll };
+  const findById = async (id: number) => {
+    const { data, error } = await supabaseServer
+      .from('categories')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
+  };
+
+  return { findAll, findById };
 };

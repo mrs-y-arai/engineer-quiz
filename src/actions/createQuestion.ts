@@ -7,7 +7,10 @@ import { QuizService } from '~/server/services/QuizService';
 type State = {
   message: string | null;
   isSuccess?: boolean;
-  createdQuizId?: number;
+  createdQuiz?: {
+    id: number;
+    title: string;
+  };
   errors?: ZodFormattedError<
     {
       title: string;
@@ -109,5 +112,12 @@ export const createQuestion = async (
     categoryId: validatedFields.data.categoryId,
   });
 
-  return { message: 'Success', isSuccess: true, createdQuizId: result.id };
+  return {
+    message: 'Success',
+    isSuccess: true,
+    createdQuiz: {
+      id: result.id,
+      title: result.title,
+    },
+  };
 };

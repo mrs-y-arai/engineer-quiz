@@ -29,10 +29,10 @@ export function RegisterForm({ categories }: Props) {
   };
 
   useEffect(() => {
-    if (state.createdQuizId) {
+    if (state.createdQuiz) {
       setIsDialogOpen(true);
     }
-  }, [state.createdQuizId]);
+  }, [state.createdQuiz]);
 
   return (
     <>
@@ -74,7 +74,7 @@ export function RegisterForm({ categories }: Props) {
                 onChange={setSelectedTag}
                 options={categories}
               />
-              <input type="hidden" name="category" value={selectedTag} />
+              <input type="hidden" name="categoryId" value={selectedTag} />
             </FormItem>
           </div>
           <div className="flex flex-col gap-y-6">
@@ -143,7 +143,7 @@ export function RegisterForm({ categories }: Props) {
       <CompleteDialog
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
-        createdQuizId={state.createdQuizId}
+        createdQuiz={state.createdQuiz}
       />
     </>
   );
