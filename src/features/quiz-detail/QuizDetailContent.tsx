@@ -8,6 +8,8 @@ import { Button } from '~/components/ui/button';
 import Link from 'next/link';
 import { Questions as QuestionsType } from '~/types/Question';
 
+console.log('test');
+
 type Props = {
   quiz: {
     id: number;
