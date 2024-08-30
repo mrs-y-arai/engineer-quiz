@@ -24,7 +24,8 @@ export const QuizRepository = () => {
     const { data, error } = await supabaseServer
       .from('quizzes')
       .select('*')
-      .limit(limit);
+      .limit(limit)
+      .order('created_at', { ascending: false });
 
     if (error) {
       throw new Error(error.message);

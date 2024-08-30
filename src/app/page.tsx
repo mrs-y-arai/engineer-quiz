@@ -4,7 +4,6 @@ import { Button } from '~/components/ui/button';
 import { revalidateTag } from 'next/cache';
 
 export default async function Home() {
-  revalidateTag('getQuizzes');
   const quizzes = await fetchOnRender();
 
   return (
