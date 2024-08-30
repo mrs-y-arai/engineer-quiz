@@ -15,7 +15,6 @@ import {
 import { CompleteDialog } from './CompleteDialog';
 import { Option } from './Option';
 import { Categories } from '~/types/Category';
-// import { tryRevalidateTag } from '~/actions/tryRevalidateTag';
 
 type Props = {
   categories: Categories;
@@ -34,21 +33,20 @@ export function RegisterForm({ categories }: Props) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [questions, setQuestions] = useState<
-    {
-      content: string;
-      options: {
-        content: string;
-        isCorrect: boolean;
-      }[];
-    }[]
-  >([]);
+  // const [questions, setQuestions] = useState<
+  //   {
+  //     content: string;
+  //     options: {
+  //       content: string;
+  //       isCorrect: boolean;
+  //     }[];
+  //   }[]
+  // >([]);
 
   const resetForm = () => {
     setTitle('');
     setDescription('');
     setSelectedCategory('');
-    // setQuestionCount(1);
   };
 
   const addQuestion = () => {

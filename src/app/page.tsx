@@ -1,8 +1,6 @@
-// import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import { QuizList } from '~/types/Quiz';
 import { Button } from '~/components/ui/button';
-import { QuizService } from '~/server/services/QuizService';
 
 export default async function Home() {
   const quizzes = await fetchOnRender();
@@ -64,9 +62,7 @@ async function fetchOnRender(): Promise<QuizList> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
     },
-    next: { revalidate: 0 },
   });
   const responseJson = await response.json();
   return responseJson.data;
