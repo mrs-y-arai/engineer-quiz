@@ -60,7 +60,7 @@ export function RegisterForm({ categories }: Props) {
       // console.log('state.createdQuiz', state.createdQuiz);
       // tryRevalidateTag('getQuizList');
       setIsDialogOpen(true);
-      // resetForm();
+      resetForm();
     }
   }, [state.createdQuiz]);
 

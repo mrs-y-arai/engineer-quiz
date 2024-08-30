@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { QuizList } from '~/types/Quiz';
 import { QuizService } from '~/server/services/QuizService';
 
+export const revalidate = 0;
+
 export async function GET(): Promise<
   | NextResponse<{
       error: string;
