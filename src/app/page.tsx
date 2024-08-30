@@ -23,9 +23,7 @@ export default async function Home() {
         </p>
       </div>
       <section className="py-4" id="quiz-list">
-        <h2 className="mb-3 text-center text-xl font-bold">
-          今まで作ったクイズたち
-        </h2>
+        <h2 className="mb-3 text-center text-xl font-bold">クイズ一覧</h2>
         {quizzes.length > 0 ? (
           <>
             <ul className="grid grid-cols-1">

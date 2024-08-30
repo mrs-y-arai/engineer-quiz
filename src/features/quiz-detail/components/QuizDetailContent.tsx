@@ -1,19 +1,19 @@
 'use client';
 
-import { CorrectDialog } from './components/CorrectDialog';
-import { InCorrectDialog } from './components/InCorrectDialog';
-import { useQuizProgress } from './hooks/useQuizProgress';
-import { Questions } from './components/Questions';
+import { CorrectDialog } from './CorrectDialog';
+import { InCorrectDialog } from './InCorrectDialog';
+import { DescriptionDialog } from './DescriptionDialog';
+import { useQuizProgress } from '../hooks/useQuizProgress';
+import { Questions } from './Questions';
 import { Button } from '~/components/ui/button';
 import Link from 'next/link';
 import { Questions as QuestionsType } from '~/types/Question';
-
-console.log('test');
 
 type Props = {
   quiz: {
     id: number;
     title: string;
+    description: string;
   };
   questions: QuestionsType;
 };
@@ -50,6 +50,7 @@ export function QuizDetailContent({ questions, quiz }: Props) {
           </Link>
         </>
       ) : null}
+      <DescriptionDialog title={quiz.title} description={quiz.description} />
       <CorrectDialog
         toggleFunction={setIsCorrectOpen}
         isOpen={isCorrectOpen}

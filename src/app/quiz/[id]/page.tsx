@@ -1,4 +1,4 @@
-import { QuizDetailContent } from '~/features/quiz-detail/QuizDetailContent';
+import { QuizDetailContent } from '~/features/quiz-detail/components/QuizDetailContent';
 import { QuizService } from '~/server/services/QuizService';
 import { Quiz } from '~/types/Quiz';
 import { snakeToCamel } from '~/utils';
@@ -19,6 +19,7 @@ export default async function QuizDetailPage({
         quiz={{
           id: quiz.id,
           title: quiz.title,
+          description: quiz.description,
         }}
         questions={quiz.questions}
       />
@@ -58,6 +59,7 @@ async function fetchOnRender(id: number): Promise<Quiz> {
   return {
     id: quiz.id,
     title: quiz.title,
+    description: quiz.description,
     questions: camelCaseQuestions,
   };
 }
