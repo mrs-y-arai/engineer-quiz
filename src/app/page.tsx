@@ -3,10 +3,8 @@ import Link from 'next/link';
 import { QuizList } from '~/types/Quiz';
 import { Button } from '~/components/ui/button';
 import { QuizService } from '~/server/services/QuizService';
-import { tryRevalidateTag } from '~/utils';
 
 export default async function Home() {
-  tryRevalidateTag('getQuizList');
   const quizzes = await fetchOnRender();
 
   return (

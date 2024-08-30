@@ -1,5 +1,3 @@
-import { revalidateTag } from 'next/cache';
-
 /**
  * スネークケースをキャメルケースに変換するヘルパー関数
  * @param obj - The object to convert.
@@ -39,8 +37,4 @@ export function generateXShareUrl(params: { text: string; path: string }) {
 export function generateLineShareUrl(params: { text: string; path: string }) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   return `https://line.me/R/msg/text/?${params.text}%20${baseUrl}${params.path}`;
-}
-
-export function tryRevalidateTag(tag: string) {
-  revalidateTag(tag);
 }

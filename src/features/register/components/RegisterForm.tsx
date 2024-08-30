@@ -15,6 +15,7 @@ import {
 import { CompleteDialog } from './CompleteDialog';
 import { Option } from './Option';
 import { Categories } from '~/types/Category';
+import { tryRevalidateTag } from '~/actions/tryRevalidateTag';
 
 type Props = {
   categories: Categories;
@@ -30,7 +31,25 @@ export function RegisterForm({ categories }: Props) {
   const [questionCount, setQuestionCount] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [questions, setQuestions] = useState<
+    {
+      content: string;
+      options: {
+        content: string;
+        isCorrect: boolean;
+      }[];
+    }[]
+  >([]);
+
+  const resetForm = () => {
+    setTitle('');
+    setDescription('');
+    setSelectedCategory('');
+    // setQuestionCount(1);
+  };
 
   const addQuestion = () => {
     setQuestionCount((prevCount) => prevCount + 1);
@@ -38,7 +57,10 @@ export function RegisterForm({ categories }: Props) {
 
   useEffect(() => {
     if (state.createdQuiz) {
+      console.log('state.createdQuiz', state.createdQuiz);
+      tryRevalidateTag('getQuizList');
       setIsDialogOpen(true);
+      resetForm();
     }
   }, [state.createdQuiz]);
 
@@ -58,6 +80,8 @@ export function RegisterForm({ categories }: Props) {
                 type="text"
                 id="title"
                 name="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 errorMessages={state.errors?.title?._errors}
               />
             </FormItem>
@@ -71,6 +95,8 @@ export function RegisterForm({ categories }: Props) {
                 type="text"
                 id="description"
                 name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 errorMessages={state.errors?.description?._errors}
               />
             </FormItem>
