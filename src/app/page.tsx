@@ -63,7 +63,8 @@ async function fetchOnRender(): Promise<QuizList> {
     headers: {
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 0 },
+    // next: { revalidate: 0 },
+    cache: 'no-store',
   });
   const responseJson = await response.json();
   return responseJson.data;
