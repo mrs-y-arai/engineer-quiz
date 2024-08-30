@@ -29,6 +29,7 @@ export function RegisterForm({ categories }: Props) {
   const [state, dispatch] = useFormState(createQuestion, initialState);
   const [questionCount, setQuestionCount] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const addQuestion = () => {

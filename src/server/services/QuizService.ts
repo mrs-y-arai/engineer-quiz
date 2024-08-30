@@ -4,7 +4,6 @@ import { OptionRepository } from '../repositories/OptionRepository';
 import { QuizCategoryRelationshipsRepository } from '../repositories/QuizCategoryRelationshipsRepository';
 import { CategoryRepository } from '../repositories/CategoryRepository';
 import { type QuizList } from '~/types/Quiz';
-import { revalidatePath } from 'next/cache';
 
 export const QuizService = () => {
   const quizRepository = QuizRepository();
@@ -97,7 +96,7 @@ export const QuizService = () => {
    * クイズを取得する
    */
   const getAllQuizWithCategory = async (): Promise<QuizList> => {
-    const quizzes = await quizRepository.findAll();
+    const quizzes = await quizRepository.findAll(100);
 
     const quizzesWithCategory = await Promise.all(
       quizzes.map(async (quiz) => {

@@ -1,10 +1,12 @@
-import { revalidatePath } from 'next/cache';
+// import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import { QuizList } from '~/types/Quiz';
 import { Button } from '~/components/ui/button';
 import { QuizService } from '~/server/services/QuizService';
+import { tryRevalidateTag } from '~/utils';
 
 export default async function Home() {
+  tryRevalidateTag('getQuizList');
   const quizzes = await fetchOnRender();
 
   return (
@@ -59,9 +61,15 @@ export default async function Home() {
 }
 
 async function fetchOnRender(): Promise<QuizList> {
-  'use server';
-  revalidatePath('/');
-  const quizService = QuizService();
-  const quizzes = await quizService.getAllQuizWithCategory();
-  return quizzes;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const response = await fetch(`${baseUrl}/api/quizzes`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+    },
+    next: { tags: ['getQuizList'] },
+  });
+  const responseJson = await response.json();
+  return responseJson.data;
 }

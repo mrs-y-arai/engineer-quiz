@@ -1,5 +1,3 @@
-// TODO: カテゴリIDのデータがうまく取れていない。
-
 'use server';
 import { z, type ZodFormattedError } from 'zod';
 import { QuizService } from '~/server/services/QuizService';
