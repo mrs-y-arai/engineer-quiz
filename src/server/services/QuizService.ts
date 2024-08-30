@@ -97,8 +97,6 @@ export const QuizService = () => {
    * クイズを取得する
    */
   const getAllQuizWithCategory = async (): Promise<QuizList> => {
-    revalidatePath('/');
-
     const quizzes = await quizRepository.findAll();
 
     const quizzesWithCategory = await Promise.all(

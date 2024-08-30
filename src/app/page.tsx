@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import { QuizList } from '~/types/Quiz';
 import { Button } from '~/components/ui/button';
@@ -58,6 +59,8 @@ export default async function Home() {
 }
 
 async function fetchOnRender(): Promise<QuizList> {
+  'use server';
+  revalidatePath('/');
   const quizService = QuizService();
   const quizzes = await quizService.getAllQuizWithCategory();
   return quizzes;

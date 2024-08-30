@@ -72,9 +72,9 @@ export function Combobox({ placeholder, value, onChange, options }: Props) {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="タグを選択" />
+          <CommandInput placeholder="カテゴリを選択" />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>カテゴリが見つかりません</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem

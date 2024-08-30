@@ -4,7 +4,14 @@ import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { createQuestion } from '~/actions/createQuestion';
 import { useFormState, useFormStatus } from 'react-dom';
-import { Label, Input, FormItem, TextArea, Combobox } from '~/components/Form';
+import { Label, Input, FormItem, TextArea } from '~/components/Form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select';
 import { CompleteDialog } from './CompleteDialog';
 import { Option } from './Option';
 import { Categories } from '~/types/Category';
@@ -22,7 +29,7 @@ export function RegisterForm({ categories }: Props) {
   const [state, dispatch] = useFormState(createQuestion, initialState);
   const [questionCount, setQuestionCount] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedTag, setSelectedTag] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   const addQuestion = () => {
     setQuestionCount((prevCount) => prevCount + 1);
@@ -68,13 +75,22 @@ export function RegisterForm({ categories }: Props) {
             </FormItem>
             <FormItem>
               <Label label="カテゴリ" htmlFor="tag" />
-              <Combobox
-                placeholder="カテゴリを選択"
-                value={selectedTag}
-                onChange={setSelectedTag}
-                options={categories}
-              />
-              <input type="hidden" name="categoryId" value={selectedTag} />
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="カテゴリを選択" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.value} value={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <input type="hidden" name="categoryId" value={selectedCategory} />
             </FormItem>
           </div>
           <div className="flex flex-col gap-y-6">
