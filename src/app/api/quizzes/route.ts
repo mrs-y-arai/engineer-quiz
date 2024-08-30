@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { QuizList } from '~/types/Quiz';
 import { QuizService } from '~/server/services/QuizService';
 
-// export const revalidate = 0;
+export const revalidate = 0;
 
 export async function GET(): Promise<
   | NextResponse<{
@@ -16,17 +16,7 @@ export async function GET(): Promise<
   try {
     const quizService = QuizService();
     const quizzes = await quizService.getAllQuizWithCategory();
-    return NextResponse.json(
-      { data: quizzes, message: 'クイズ一覧取得成功' },
-      {
-        status: 200,
-        headers: {
-          'Cache-Control': 'public, s-maxage=1',
-          'CDN-Cache-Control': 'public, s-maxage=1',
-          'Vercel-CDN-Cache-Control': 'public, s-maxage=1',
-        },
-      },
-    );
+    return NextResponse.json({ data: quizzes, message: 'クイズ一覧取得成功' });
   } catch (error) {
     return NextResponse.json({ error: 'クイズ一覧取得失敗' });
   }

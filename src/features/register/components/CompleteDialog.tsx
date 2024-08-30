@@ -39,8 +39,7 @@ export function CompleteDialog({
               <Link
                 href={`/quiz/${createdQuiz.id}`}
                 className="my-4 block underline"
-                target="_blank"
-                rel="noopener noreferrer"
+                prefetch={true}
               >
                 クイズURL: {`${window.location.origin}/quiz/${createdQuiz.id}`}
               </Link>
