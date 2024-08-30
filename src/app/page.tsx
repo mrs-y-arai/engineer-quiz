@@ -66,7 +66,7 @@ async function fetchOnRender(): Promise<QuizList> {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
     },
-    next: { tags: ['getQuizList'] },
+    next: { revalidate: 0 },
   });
   const responseJson = await response.json();
   return responseJson.data;

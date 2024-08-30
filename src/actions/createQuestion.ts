@@ -31,7 +31,6 @@ const schema = z.object({
   questions: z
     .object({
       content: z.string().min(1, { message: '問題文は必須です' }),
-      // TODO: 以下のバリデーションがうまくいかない
       options: z
         .array(
           z.object({

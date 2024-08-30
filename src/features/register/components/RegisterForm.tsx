@@ -15,7 +15,7 @@ import {
 import { CompleteDialog } from './CompleteDialog';
 import { Option } from './Option';
 import { Categories } from '~/types/Category';
-import { tryRevalidateTag } from '~/actions/tryRevalidateTag';
+// import { tryRevalidateTag } from '~/actions/tryRevalidateTag';
 
 type Props = {
   categories: Categories;
@@ -57,10 +57,10 @@ export function RegisterForm({ categories }: Props) {
 
   useEffect(() => {
     if (state.createdQuiz) {
-      console.log('state.createdQuiz', state.createdQuiz);
-      tryRevalidateTag('getQuizList');
+      // console.log('state.createdQuiz', state.createdQuiz);
+      // tryRevalidateTag('getQuizList');
       setIsDialogOpen(true);
-      resetForm();
+      // resetForm();
     }
   }, [state.createdQuiz]);
 
