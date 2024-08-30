@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { QuizList } from '~/types/Quiz';
 import { Button } from '~/components/ui/button';
-import { revalidateTag } from 'next/cache';
 
 export default async function Home() {
   const quizzes = await fetchOnRender();
@@ -65,7 +64,6 @@ async function fetchOnRender(): Promise<QuizList> {
       'Content-Type': 'application/json',
     },
     next: { tags: ['getQuizzes'] },
-    // cache: 'no-store',
   });
   const responseJson = await response.json();
   return responseJson.data;
