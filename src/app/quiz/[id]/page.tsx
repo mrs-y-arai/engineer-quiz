@@ -1,8 +1,9 @@
 import { QuizDetailContent } from '~/features/quiz-detail/components/QuizDetailContent';
 import { QuizService } from '~/server/services/QuizService';
-import { Quiz } from '~/types/Quiz';
 import { snakeToCamel } from '~/utils';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
+import { LoadingUI } from '~/components/Loading/LoadingUI';
 
 export default async function QuizDetailPage({
   params,
@@ -10,19 +11,12 @@ export default async function QuizDetailPage({
   params: { id: string };
 }) {
   const quizId = parseInt(params.id, 10);
-  const quiz = await fetchOnRender(quizId);
 
   return (
     <div className="mx-auto max-w-[700px]">
-      <h1 className="headline mb-4 text-center">{quiz.title}</h1>
-      <QuizDetailContent
-        quiz={{
-          id: quiz.id,
-          title: quiz.title,
-          description: quiz.description,
-        }}
-        questions={quiz.questions}
-      />
+      <Suspense fallback={<LoadingUI />}>
+        <QuizDetail id={quizId} />
+      </Suspense>
     </div>
   );
 }
@@ -31,7 +25,7 @@ export default async function QuizDetailPage({
  * ページがレンダリングされるタイミングで発火させるデータ取得処理
  * @param id
  */
-async function fetchOnRender(id: number): Promise<Quiz> {
+async function QuizDetail({ id }: { id: number }) {
   const { getQuizWithQuestionsAndOptions } = QuizService();
   const quiz = await getQuizWithQuestionsAndOptions(id);
 
@@ -56,10 +50,17 @@ async function fetchOnRender(id: number): Promise<Quiz> {
 
   const camelCaseQuestions = snakeToCamel(transformedQuestions);
 
-  return {
-    id: quiz.id,
-    title: quiz.title,
-    description: quiz.description,
-    questions: camelCaseQuestions,
-  };
+  return (
+    <>
+      <h1 className="headline mb-4 text-center">{quiz.title}</h1>
+      <QuizDetailContent
+        quiz={{
+          id: quiz.id,
+          title: quiz.title,
+          description: quiz.description,
+        }}
+        questions={camelCaseQuestions}
+      />
+    </>
+  );
 }
