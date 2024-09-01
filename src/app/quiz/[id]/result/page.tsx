@@ -2,6 +2,8 @@
 
 import { useSearchParams, useParams } from 'next/navigation';
 import { SnsShare } from '~/components/SnsShare';
+import { Button } from '~/components/ui/button';
+import Link from 'next/link';
 
 export default function ResultPage() {
   const params = useParams();
@@ -28,6 +30,13 @@ export default function ResultPage() {
             </h1>
             <p className="mb-4 text-center text-2xl font-bold">{score}点!</p>
             <SnsShare text={shareText} path={path} />
+            <Link
+              prefetch={true}
+              className="mx-auto mt-4 block w-fit"
+              href={`/quiz/${quizId}`}
+            >
+              <Button variant="outline">もう一度挑戦する</Button>
+            </Link>
           </>
         )}
       </div>

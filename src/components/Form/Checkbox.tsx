@@ -4,14 +4,27 @@ import { cn } from '~/lib/utils';
 type CheckboxProps = {
   id: string;
   name: string;
+  value: boolean;
+  onChange: (checked: boolean) => void;
   className?: string;
 };
 
-export function Checkbox({ ...props }: CheckboxProps) {
+export function Checkbox({
+  id,
+  name,
+  value,
+  onChange,
+  className,
+  ...props
+}: CheckboxProps) {
   return (
     <div className="relative w-full md:grow">
       <CheckboxComponent
-        className={cn(props.className, 'mt-3 inline-block')}
+        id={id}
+        name={name}
+        value={String(value)}
+        onCheckedChange={onChange}
+        className={cn(className, 'mt-3 inline-block')}
         {...props}
       />
     </div>

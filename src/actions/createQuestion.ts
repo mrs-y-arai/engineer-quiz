@@ -36,9 +36,9 @@ const schema = z.object({
           z.object({
             content: z.string().min(1, { message: '選択肢は必須です' }),
             isCorrect: z
-              .enum(['on'])
+              .enum(['true'])
               .nullable()
-              .transform((value) => value === 'on'),
+              .transform((value) => value === 'true'),
           }),
         )
         .superRefine((val, ctx) => {

@@ -27,40 +27,103 @@ export function RegisterForm({ categories }: Props) {
   };
 
   const [state, dispatch] = useFormState(createQuestion, initialState);
-  const [questionCount, setQuestionCount] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  // const [questions, setQuestions] = useState<
-  //   {
-  //     content: string;
-  //     options: {
-  //       content: string;
-  //       isCorrect: boolean;
-  //     }[];
-  //   }[]
-  // >([]);
+  const [questions, setQuestions] = useState<
+    {
+      content: string;
+      options: {
+        content: string;
+        isCorrect: boolean;
+      }[];
+    }[]
+  >([
+    {
+      content: '',
+      options: [
+        { content: '', isCorrect: false },
+        { content: '', isCorrect: false },
+        { content: '', isCorrect: false },
+        { content: '', isCorrect: false },
+      ],
+    },
+  ]);
 
   const resetForm = () => {
     setTitle('');
     setDescription('');
     setSelectedCategory('');
+    setQuestions((prevQuestions) => {
+      return prevQuestions.map(() => {
+        return {
+          content: '',
+          options: [
+            { content: '', isCorrect: false },
+            { content: '', isCorrect: false },
+            { content: '', isCorrect: false },
+            { content: '', isCorrect: false },
+          ],
+        };
+      });
+    });
   };
 
   const addQuestion = () => {
-    setQuestionCount((prevCount) => prevCount + 1);
+    setQuestions((prevQuestion) => {
+      return [
+        ...prevQuestion,
+        {
+          content: '',
+          options: [
+            { content: '', isCorrect: false },
+            { content: '', isCorrect: false },
+            { content: '', isCorrect: false },
+            { content: '', isCorrect: false },
+          ],
+        },
+      ];
+    });
   };
 
   useEffect(() => {
     if (state.createdQuiz) {
-      // console.log('state.createdQuiz', state.createdQuiz);
-      // tryRevalidateTag('getQuizList');
       setIsDialogOpen(true);
       resetForm();
     }
   }, [state.createdQuiz]);
+
+  /**
+   * 正解の選択肢のチェックボックスの変更
+   * @param questionIndex 問題のインデックス
+   * @param optionIndex 選択肢のインデックス
+   * @param isCorrect 正解かどうか
+   */
+  const handleIsCorrectChange = (
+    questionIndex: number,
+    optionIndex: number,
+    isCorrect: boolean,
+  ) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((question, index) => {
+        return index === questionIndex
+          ? {
+              ...question,
+              options: question.options.map((option, optIdx) =>
+                optIdx === optionIndex
+                  ? {
+                      ...option,
+                      isCorrect: isCorrect,
+                    }
+                  : option,
+              ),
+            }
+          : question;
+      }),
+    );
+  };
 
   return (
     <>
@@ -123,7 +186,7 @@ export function RegisterForm({ categories }: Props) {
             <p className="text-center text-sm">
               4択問題を作ります。正解の選択肢に、チェックをつけてください。
             </p>
-            {Array.from({ length: questionCount }).map((_, questionIndex) => (
+            {questions.map((question, questionIndex) => (
               <div key={questionIndex}>
                 <p className="mb-2 text-center text-base font-bold">
                   {questionIndex + 1}問目
@@ -140,6 +203,16 @@ export function RegisterForm({ categories }: Props) {
                   <TextArea
                     className="block"
                     name="question"
+                    value={questions[questionIndex].content}
+                    onChange={(e) =>
+                      setQuestions((prevQuestions) =>
+                        prevQuestions.map((question, index) =>
+                          index === questionIndex
+                            ? { ...question, content: e.target.value }
+                            : question,
+                        ),
+                      )
+                    }
                     id={`question${questionIndex + 1}`}
                     errorMessages={
                       state.errors?.questions?.[questionIndex]?.content?._errors
@@ -147,11 +220,42 @@ export function RegisterForm({ categories }: Props) {
                   />
                 </FormItem>
                 <div className="mt-4 grid grid-cols-1 gap-y-3">
-                  {Array.from({ length: 4 }).map((_, optionIndex) => {
+                  {question.options.map((_, optionIndex) => {
                     return (
                       <Option
                         key={optionIndex}
                         index={optionIndex}
+                        value={
+                          questions[questionIndex].options[optionIndex].content
+                        }
+                        onChange={(e) =>
+                          setQuestions((prevQuestions) =>
+                            prevQuestions.map((question, index) => {
+                              console.log('questionIndex', questionIndex);
+                              console.log('optionIndex', optionIndex);
+
+                              return index === questionIndex
+                                ? {
+                                    ...question,
+                                    options: question.options.map(
+                                      (option, optIdx) =>
+                                        optIdx === optionIndex
+                                          ? {
+                                              ...option,
+                                              content: e.target.value,
+                                            }
+                                          : option,
+                                    ),
+                                  }
+                                : question;
+                            }),
+                          )
+                        }
+                        isCorrectValue={
+                          questions[questionIndex].options[optionIndex]
+                            .isCorrect
+                        }
+                        isCorrectOnChange={handleIsCorrectChange}
                         questionIndex={questionIndex}
                         errorMessages={
                           state.errors?.questions?.[questionIndex]?.options?.[
