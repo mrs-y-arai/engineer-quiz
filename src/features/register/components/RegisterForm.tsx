@@ -30,6 +30,9 @@ export function RegisterForm({ categories }: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
+  /**
+   * 編集フォームにも使いそうなので、state管理にしてる
+   */
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
