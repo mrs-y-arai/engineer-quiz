@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '~/components/ui/button';
 import { createQuestion } from '~/actions/createQuestion';
 import { useFormState, useFormStatus } from 'react-dom';
@@ -28,6 +28,7 @@ export function RegisterForm({ categories }: Props) {
 
   const [state, dispatch] = useFormState(createQuestion, initialState);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -56,19 +57,18 @@ export function RegisterForm({ categories }: Props) {
     setTitle('');
     setDescription('');
     setSelectedCategory('');
-    setQuestions((prevQuestions) => {
-      return prevQuestions.map(() => {
-        return {
-          content: '',
-          options: [
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-          ],
-        };
-      });
-    });
+    setQuestions([
+      {
+        content: '',
+        options: [
+          { content: '', isCorrect: false },
+          { content: '', isCorrect: false },
+          { content: '', isCorrect: false },
+          { content: '', isCorrect: false },
+        ],
+      },
+    ]);
+    formRef.current?.reset();
   };
 
   const addQuestion = () => {
@@ -127,7 +127,7 @@ export function RegisterForm({ categories }: Props) {
 
   return (
     <>
-      <form action={(formData) => dispatch(formData)}>
+      <form ref={formRef} action={(formData) => dispatch(formData)}>
         <div className="flex flex-col gap-y-8">
           <p className="-mb-6 text-center text-lg font-bold">基本情報</p>
           <div className="flex flex-col gap-y-2">
