@@ -16,7 +16,7 @@ export default function Error() {
         <Button
           className="mx-auto flex"
           variant="default"
-          onClick={() => router.push('/setting/account')}
+          onClick={() => router.push('/')}
         >
           ホームに戻る
         </Button>

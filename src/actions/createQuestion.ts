@@ -1,6 +1,7 @@
 'use server';
 import { z, type ZodFormattedError } from 'zod';
 import { QuizService } from '~/server/services/QuizService';
+import { AuthRepository } from '~/server/repositories/AuthRepository';
 
 type State = {
   message: string | null;
@@ -61,6 +62,14 @@ export const createQuestion = async (
   state: State,
   formData: FormData,
 ): Promise<State> => {
+  const user = await AuthRepository().getUser();
+  if (!user) {
+    return {
+      message: 'ログインしてください',
+      isSuccess: false,
+    };
+  }
+
   const questionsFormData = formData.getAll('question');
   const mappedQuestions = questionsFormData.map((question, questionIndex) => {
     const options = formData.getAll(`option_${questionIndex + 1}`);
@@ -103,6 +112,7 @@ export const createQuestion = async (
 
   const { createQuizWithQuestionsAndOptions } = QuizService();
   const result = await createQuizWithQuestionsAndOptions({
+    userId: user.id,
     title: validatedFields.data.title,
     description: validatedFields.data.description,
     questions: validatedFields.data.questions,

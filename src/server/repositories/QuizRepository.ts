@@ -1,10 +1,10 @@
-import { supabaseServer } from '~/lib/supabase/supabaseServer';
+import { createClient } from '~/lib/supabase/supabaseServer';
 import { type TablesInsert } from '~/../supabase/database.types';
 import { SUPABASE_ERROR_CODE } from '~/constants/supabaseErrorCode';
 
 export const QuizRepository = () => {
   const findById = async (id: number) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('quizzes')
       .select('*')
       .eq('id', id)
@@ -20,8 +20,21 @@ export const QuizRepository = () => {
     return data;
   };
 
+  const findByUserId = async (userId: string) => {
+    const { data, error } = await createClient()
+      .from('quizzes')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
+  };
+
   const findAll = async (limit: number = 10) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('quizzes')
       .select('*')
       .limit(limit)
@@ -35,7 +48,7 @@ export const QuizRepository = () => {
   };
 
   const create = async (value: TablesInsert<'quizzes'>) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('quizzes')
       .insert({
         ...value,
@@ -52,6 +65,7 @@ export const QuizRepository = () => {
 
   return {
     findById,
+    findByUserId,
     findAll,
     create,
   };

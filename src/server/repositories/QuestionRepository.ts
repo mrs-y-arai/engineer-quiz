@@ -1,9 +1,9 @@
-import { supabaseServer } from '~/lib/supabase/supabaseServer';
+import { createClient } from '~/lib/supabase/supabaseServer';
 import { type TablesInsert } from '~/../supabase/database.types';
 
 export const QuestionRepository = () => {
   const findById = async (id: number) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('questions')
       .select('*')
       .eq('id', id)
@@ -17,7 +17,7 @@ export const QuestionRepository = () => {
   };
 
   const findByQuizId = async (quizId: number) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('questions')
       .select('*')
       .eq('quiz_id', quizId);
@@ -30,7 +30,7 @@ export const QuestionRepository = () => {
   };
 
   const findAll = async () => {
-    const { data, error } = await supabaseServer.from('questions').select('*');
+    const { data, error } = await createClient().from('questions').select('*');
 
     if (error) {
       throw new Error(error.message);
@@ -40,7 +40,7 @@ export const QuestionRepository = () => {
   };
 
   const create = async (value: TablesInsert<'questions'>) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('questions')
       .insert({
         ...value,

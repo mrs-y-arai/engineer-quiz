@@ -1,8 +1,8 @@
-import { supabaseServer } from '~/lib/supabase/supabaseServer';
+import { createClient } from '~/lib/supabase/supabaseServer';
 
 export const CategoryRepository = () => {
   const findAll = async (limit: number = 100) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('categories')
       .select('*')
       .limit(limit);
@@ -15,7 +15,7 @@ export const CategoryRepository = () => {
   };
 
   const findById = async (id: number) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('categories')
       .select('*')
       .eq('id', id)

@@ -6,8 +6,15 @@ import { Button } from '../ui/button';
 import { useState } from 'react';
 import Link from 'next/link';
 import { cn } from '~/lib/utils';
+import { Logout } from '~/components/Logout';
 
-export function HamburgerMenu({ className }: { className?: string }) {
+export function HamburgerMenu({
+  isAuthenticated,
+  className,
+}: {
+  isAuthenticated: boolean;
+  className?: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const openMenu = () => {
@@ -97,6 +104,30 @@ export function HamburgerMenu({ className }: { className?: string }) {
           >
             クイズ一覧
           </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                prefetch={true}
+                onClick={closeMenu}
+                className="text-white"
+                href="/mypage"
+              >
+                マイページ
+              </Link>
+              <Logout />
+            </>
+          ) : (
+            <>
+              <Link
+                prefetch={true}
+                onClick={closeMenu}
+                className="text-white"
+                href="/login"
+              >
+                ログイン/新規作成
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </>

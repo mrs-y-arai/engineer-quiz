@@ -1,9 +1,9 @@
-import { supabaseServer } from '~/lib/supabase/supabaseServer';
+import { createClient } from '~/lib/supabase/supabaseServer';
 import { SUPABASE_ERROR_CODE } from '~/constants/supabaseErrorCode';
 
 export const QuizCategoryRelationshipsRepository = () => {
   const create = async (quizId: number, categoryId: number) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('quizzes_categories_relationships')
       .insert({
         quiz_id: quizId,
@@ -20,7 +20,7 @@ export const QuizCategoryRelationshipsRepository = () => {
   };
 
   const findByQuizId = async (quizId: number) => {
-    const { data, error } = await supabaseServer
+    const { data, error } = await createClient()
       .from('quizzes_categories_relationships')
       .select('*')
       .eq('quiz_id', quizId)
