@@ -4,8 +4,9 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
+console.log('supabaseUrl', supabaseUrl);
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY ?? '';
-
+console.log('supabaseServiceKey', supabaseServiceKey);
 if (supabaseUrl === '' || supabaseServiceKey === '') {
   throw new Error(
     `supabaseUrl or supabaseServiceKey not set for Server - ${supabaseServiceKey}`,

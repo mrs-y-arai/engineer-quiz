@@ -5,10 +5,12 @@ import { Button } from '~/components/ui/button';
 export default function LoginPage() {
   const signInWithTwitter = async () => {
     'use server';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) throw new Error('NEXT_PUBLIC_BASE_URL is not set');
     const { data, error } = await createClient().auth.signInWithOAuth({
       provider: 'twitter',
       options: {
-        redirectTo: 'http://localhost:3000/api/auth/callback',
+        redirectTo: `${baseUrl}/api/auth/callback`,
       },
     });
 
