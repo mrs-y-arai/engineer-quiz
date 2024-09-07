@@ -6,7 +6,7 @@ import { logout } from '~/actions/logout';
 export function Logout() {
   return (
     <form action={logout}>
-      <Button className="mx-auto" type="submit">
+      <Button variant="outline" className="mx-auto" type="submit">
         ログアウト
       </Button>
     </form>

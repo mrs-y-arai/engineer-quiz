@@ -2,6 +2,7 @@ import { AuthRepository } from '~/server/repositories/AuthRepository';
 import { QuizList as QuizListType } from '~/types/Quiz';
 import Link from 'next/link';
 import { Logout } from '~/components/Logout';
+import { Button } from '~/components/ui/button';
 
 export default async function MypagePage() {
   const user = await AuthRepository().getUser();
@@ -9,7 +10,10 @@ export default async function MypagePage() {
     <>
       <div className="mb-6 text-center">
         <h1 className="mb-4 text-xl font-bold">マイページ</h1>
-        <p>ユーザー名: {user.name}</p>
+        <p className="mb-4">ユーザー名: {user.name}</p>
+        <Link className="mx-auto w-fit" href="/register">
+          <Button>クイズを作成する</Button>
+        </Link>
       </div>
       <div className="mb-10">
         <h2 className="mb-4 text-center text-lg font-bold">作成したクイズ</h2>
