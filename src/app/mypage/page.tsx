@@ -11,7 +11,7 @@ export default async function MypagePage() {
       <div className="mb-6 text-center">
         <h1 className="mb-4 text-xl font-bold">マイページ</h1>
         <p className="mb-4">ユーザー名: {user.name}</p>
-        <Link className="mx-auto w-fit" href="/register">
+        <Link className="mx-auto block w-fit" href="/register">
           <Button>クイズを作成する</Button>
         </Link>
       </div>
