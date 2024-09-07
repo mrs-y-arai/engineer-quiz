@@ -1,4 +1,3 @@
-// import { createClient } from '@supabase/supabase-js';
 import { Database } from '~/../supabase/database.types';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
