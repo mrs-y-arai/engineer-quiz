@@ -24,7 +24,8 @@ export const QuizRepository = () => {
     const { data, error } = await createClient()
       .from('quizzes')
       .select('*')
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
 
     if (error) {
       throw new Error(error.message);
