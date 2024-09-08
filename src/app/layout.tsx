@@ -4,6 +4,7 @@ import './globals.css';
 import { Header } from '~/components/layouts/Header';
 import { Footer } from '~/components/layouts/Footer';
 import { FixedMenu } from '~/components/Menu/FixedMenu';
+import { headers } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,10 +20,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const url = headers().get('x-url') || '';
+  const pathname = new URL(url).pathname;
+  const hasFixedMenu = !pathname.includes('/register');
+
   return (
     <html lang="ja">
       <body className={inter.className}>
-        <FixedMenu />
+        {hasFixedMenu && <FixedMenu />}
         <Header />
         <main className="container py-10">{children}</main>
         <Footer />
