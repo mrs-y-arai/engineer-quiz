@@ -50,7 +50,11 @@ export function QuizDetailContent({ questions, quiz }: Props) {
           </Link>
         </>
       ) : null}
-      <DescriptionDialog title={quiz.title} description={quiz.description} />
+      <DescriptionDialog
+        id={quiz.id}
+        title={quiz.title}
+        description={quiz.description}
+      />
       <CorrectDialog
         toggleFunction={setIsCorrectOpen}
         isOpen={isCorrectOpen}

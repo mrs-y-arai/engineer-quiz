@@ -4,19 +4,19 @@ import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '~/components/ui/dialog';
 import { Button } from '~/components/ui/button';
+import { SnsShare } from '~/components/SnsShare';
 
 type Props = {
+  id: number;
   title: string;
   description: string;
 };
 
-export function DescriptionDialog({ title, description }: Props) {
+export function DescriptionDialog({ id, title, description }: Props) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -28,11 +28,18 @@ export function DescriptionDialog({ title, description }: Props) {
         <div>
           <p className="text-center text-lg">{description}</p>
         </div>
-        <DialogFooter>
-          <DialogTrigger asChild>
-            <Button>クイズを始める</Button>
-          </DialogTrigger>
-        </DialogFooter>
+        <Button
+          className="mx-auto block w-fit"
+          onClick={() => setIsOpen(false)}
+        >
+          クイズを始める
+        </Button>
+        <div className="mt-4">
+          <SnsShare
+            text={`${title}のクイズを解いてみよう!`}
+            path={`/quiz/${id}`}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );
