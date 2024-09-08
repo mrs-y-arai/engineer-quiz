@@ -30,7 +30,7 @@ async function UserProfile() {
   const user = await AuthRepository().getUser();
   return (
     <>
-      <p>ユーザー名: {user.name}</p>
+      <p className="mb-4">ユーザー名: {user.name}</p>
       <Link className="mx-auto block w-fit" href="/register">
         <Button>クイズを作成する</Button>
       </Link>
