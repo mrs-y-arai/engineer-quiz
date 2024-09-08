@@ -3,23 +3,37 @@ import { QuizList as QuizListType } from '~/types/Quiz';
 import Link from 'next/link';
 import { Logout } from '~/components/Logout';
 import { Button } from '~/components/ui/button';
+import { Suspense } from 'react';
+import { LoadingUI } from '~/components/Loading/LoadingUI';
 
-export default async function MypagePage() {
-  const user = await AuthRepository().getUser();
+export default function MypagePage() {
   return (
     <>
       <div className="mb-6 text-center">
         <h1 className="mb-4 text-xl font-bold">マイページ</h1>
-        <p className="mb-4">ユーザー名: {user.name}</p>
-        <Link className="mx-auto block w-fit" href="/register">
-          <Button>クイズを作成する</Button>
-        </Link>
+        <Suspense fallback={<LoadingUI />}>
+          <UserProfile />
+        </Suspense>
       </div>
       <div className="mb-10">
         <h2 className="mb-4 text-center text-lg font-bold">作成したクイズ</h2>
-        <QuizList />
+        <Suspense fallback={<LoadingUI />}>
+          <QuizList />
+        </Suspense>
       </div>
       <Logout />
+    </>
+  );
+}
+
+async function UserProfile() {
+  const user = await AuthRepository().getUser();
+  return (
+    <>
+      <p>ユーザー名: {user.name}</p>
+      <Link className="mx-auto block w-fit" href="/register">
+        <Button>クイズを作成する</Button>
+      </Link>
     </>
   );
 }
