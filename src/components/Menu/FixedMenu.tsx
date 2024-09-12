@@ -8,7 +8,7 @@ export function FixedMenu() {
         <Link
           prefetch={true}
           className="block h-[45px] w-[160px]"
-          href="/register"
+          href="/mypage/quiz-setting/register"
         >
           <Button className="size-full" variant="default" size="lg">
             クイズを作る

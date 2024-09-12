@@ -29,7 +29,11 @@ export default async function Home() {
       </section>
       <section className="py-4">
         <h2 className="mb-4 text-center text-xl font-bold">クイズを作る</h2>
-        <Link href="/register" prefetch={true} className="mx-auto block w-fit">
+        <Link
+          href="/mypage/quiz-setting/register"
+          prefetch={true}
+          className="mx-auto block w-fit"
+        >
           <Button>クイズを作る</Button>
         </Link>
       </section>

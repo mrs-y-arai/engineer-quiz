@@ -92,7 +92,7 @@ export function HamburgerMenu({
             prefetch={true}
             onClick={closeMenu}
             className="text-white"
-            href="/register"
+            href="/mypage/quiz-setting/register"
           >
             クイズを作る
           </Link>

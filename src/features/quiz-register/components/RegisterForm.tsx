@@ -91,6 +91,13 @@ export function RegisterForm({ categories }: Props) {
     });
   };
 
+  const removeQuestion = (index: number) => {
+    setQuestions((prevQuestions) => {
+      const newQuestions = prevQuestions.filter((_, i) => i !== index);
+      return newQuestions;
+    });
+  };
+
   useEffect(() => {
     if (state.createdQuiz) {
       setIsDialogOpen(true);
@@ -234,9 +241,6 @@ export function RegisterForm({ categories }: Props) {
                         onChange={(e) =>
                           setQuestions((prevQuestions) =>
                             prevQuestions.map((question, index) => {
-                              console.log('questionIndex', questionIndex);
-                              console.log('optionIndex', optionIndex);
-
                               return index === questionIndex
                                 ? {
                                     ...question,
@@ -273,6 +277,18 @@ export function RegisterForm({ categories }: Props) {
                       />
                     );
                   })}
+                  {questionIndex > 0 && (
+                    <>
+                      <Button
+                        onClick={() => removeQuestion(questionIndex)}
+                        variant="destructive"
+                        className="mx-auto mt-1"
+                        type="button"
+                      >
+                        問題削除
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}

@@ -1,4 +1,4 @@
-import { RegisterForm } from '~/features/register/components/RegisterForm';
+import { RegisterForm } from '~/features/quiz-register/components/RegisterForm';
 import { CategoryRepository } from '~/server/repositories/CategoryRepository';
 import { Suspense } from 'react';
 import { LoadingUI } from '~/components/Loading/LoadingUI';

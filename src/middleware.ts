@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '~/lib/supabase/supabaseServer';
 
-const protectedRoutes = ['/register', '/mypage'];
+const protectedRoutes = ['/mypage/*'];
 
 export async function middleware(request: NextRequest) {
   if (protectedRoutes.includes(request.nextUrl.pathname)) {

@@ -31,7 +31,10 @@ async function UserProfile() {
   return (
     <>
       <p className="mb-4">ユーザー名: {user.name}</p>
-      <Link className="mx-auto block w-fit" href="/register">
+      <Link
+        className="mx-auto block w-fit"
+        href="/mypage/quiz-setting/register"
+      >
         <Button>クイズを作成する</Button>
       </Link>
     </>
