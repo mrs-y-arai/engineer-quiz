@@ -57,7 +57,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-        disabled={isProcessing}
+        disabled={isProcessing || props.disabled}
       >
         {isProcessing ? '処理中...' : children}
       </Comp>

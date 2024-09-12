@@ -37,5 +37,16 @@ export const QuizCategoryRelationshipsRepository = () => {
     return data;
   };
 
-  return { create, findByQuizId };
+  const deleteByQuizId = async (quizId: number) => {
+    const { error } = await createClient()
+      .from('quizzes_categories_relationships')
+      .delete()
+      .eq('quiz_id', quizId);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return { create, findByQuizId, deleteByQuizId };
 };

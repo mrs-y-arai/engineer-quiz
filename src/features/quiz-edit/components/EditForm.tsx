@@ -18,9 +18,23 @@ import { Categories } from '~/types/Category';
 
 type Props = {
   categories: Categories;
+  initialQuiz: {
+    id: number;
+    title: string;
+    description: string;
+    categoryId?: number;
+    questions: {
+      id: number;
+      content: string;
+      options: {
+        content: string;
+        isCorrect: boolean;
+      }[];
+    }[];
+  };
 };
 
-export function RegisterForm({ categories }: Props) {
+export function EditForm({ categories, initialQuiz }: Props) {
   const initialState = {
     errors: { _errors: [] },
     message: null,
@@ -33,9 +47,11 @@ export function RegisterForm({ categories }: Props) {
   /**
    * 編集フォームにも使いそうなので、state管理にしてる
    */
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [title, setTitle] = useState(initialQuiz.title);
+  const [description, setDescription] = useState(initialQuiz.description);
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialQuiz.categoryId?.toString() || '',
+  );
   const [questions, setQuestions] = useState<
     {
       content: string;
@@ -44,17 +60,7 @@ export function RegisterForm({ categories }: Props) {
         isCorrect: boolean;
       }[];
     }[]
-  >([
-    {
-      content: '',
-      options: [
-        { content: '', isCorrect: false },
-        { content: '', isCorrect: false },
-        { content: '', isCorrect: false },
-        { content: '', isCorrect: false },
-      ],
-    },
-  ]);
+  >(initialQuiz.questions);
 
   const resetForm = () => {
     setTitle('');
@@ -141,6 +147,7 @@ export function RegisterForm({ categories }: Props) {
         <div className="flex flex-col gap-y-8">
           <p className="-mb-6 text-center text-lg font-bold">基本情報</p>
           <div className="flex flex-col gap-y-2">
+            <Input type="hidden" id="id" name="id" value={initialQuiz.id} />
             <FormItem>
               <Label
                 label="タイトル"
@@ -282,7 +289,7 @@ export function RegisterForm({ categories }: Props) {
                     variant="destructive"
                     className="mx-auto mt-1"
                     type="button"
-                    disabled={questions.length < 2}
+                    disabled={questions.length === 1}
                   >
                     問題削除
                   </Button>

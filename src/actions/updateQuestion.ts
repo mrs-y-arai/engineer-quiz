@@ -1,9 +1,9 @@
 'use server';
-import { QuizFormState, quizFormSchema } from '~/types/QuizForm';
 import { QuizService } from '~/server/services/QuizService';
 import { AuthRepository } from '~/server/repositories/AuthRepository';
+import { QuizFormState, quizFormSchema } from '~/types/QuizForm';
 
-export const createQuestion = async (
+export const updateQuestion = async (
   state: QuizFormState,
   formData: FormData,
 ): Promise<QuizFormState> => {
@@ -40,6 +40,7 @@ export const createQuestion = async (
 
   // ユーザースキーマによるバリデーション
   const validatedFields = quizFormSchema.safeParse({
+    id: formData.get('id'),
     title: formData.get('title'),
     description: formData.get('description'),
     questions: mappedQuestions,
@@ -56,9 +57,17 @@ export const createQuestion = async (
     };
   }
 
-  const { createQuizWithQuestionsAndOptions } = QuizService();
-  const result = await createQuizWithQuestionsAndOptions({
-    userId: user.id,
+  const id = Number(formData.get('id'));
+  if (!id) {
+    return {
+      message: 'Quiz ID is required',
+      isSuccess: false,
+    };
+  }
+
+  const { updateQuizWithQuestionsAndOptions } = QuizService();
+  const result = await updateQuizWithQuestionsAndOptions({
+    quizId: id,
     title: validatedFields.data.title,
     description: validatedFields.data.description,
     questions: validatedFields.data.questions,

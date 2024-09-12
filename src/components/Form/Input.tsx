@@ -1,5 +1,5 @@
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  errorMessages: string[] | undefined;
+  errorMessages?: string[];
 }
 
 export function Input({ errorMessages, ...props }: InputProps) {

@@ -55,10 +55,22 @@ export const OptionRepository = () => {
     return data;
   };
 
+  const deleteByQuestionId = async (questionId: number) => {
+    const { error } = await createClient()
+      .from('options')
+      .delete()
+      .eq('question_id', questionId);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
   return {
     findById,
     findByQuestionId,
     findAll,
     create,
+    deleteByQuestionId,
   };
 };

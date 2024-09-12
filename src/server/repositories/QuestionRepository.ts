@@ -55,10 +55,21 @@ export const QuestionRepository = () => {
     return data;
   };
 
+  const deleteById = async (id: number) => {
+    const { error } = await createClient()
+      .from('questions')
+      .delete()
+      .eq('id', id);
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
   return {
     findById,
     findByQuizId,
     findAll,
     create,
+    deleteById,
   };
 };

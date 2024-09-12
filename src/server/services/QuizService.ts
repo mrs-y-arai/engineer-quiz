@@ -95,6 +95,78 @@ export const QuizService = () => {
   };
 
   /**
+   * クイズ1つ分のまとまりを更新する
+   */
+  const updateQuizWithQuestionsAndOptions = async (params: {
+    quizId: number;
+    title: string;
+    description: string;
+    questions: {
+      content: string;
+      options: {
+        content: string;
+        isCorrect: boolean;
+      }[];
+    }[];
+    categoryId?: number;
+  }) => {
+    const quiz = await quizRepository.findById(params.quizId);
+    if (!quiz) throw new Error('Quiz not found');
+
+    const questions = await questionRepository.findByQuizId(params.quizId);
+
+    // クイズの質問・選択肢・カテゴリを削除する
+    await Promise.all([
+      questions.map(async (question) => {
+        await Promise.all([
+          optionRepository.deleteByQuestionId(question.id),
+          questionRepository.deleteById(question.id),
+        ]);
+      }),
+      quizCategoryRelationshipsRepository.deleteByQuizId(params.quizId),
+    ]);
+
+    // クイズの質問・選択肢・カテゴリをupdateする
+    await Promise.all([
+      // クイズのタイトルと説明を更新する
+      quizRepository.update(params.quizId, {
+        title: params.title,
+        description: params.description,
+      }),
+      // クイズの質問と選択肢を更新する
+      ...params.questions.map(async (question) => {
+        const resultQuestion = await questionRepository.create({
+          content: question.content,
+          quiz_id: params.quizId,
+        });
+
+        await Promise.all(
+          question.options.map(async (option) => {
+            await optionRepository.create({
+              content: option.content,
+              is_correct: option.isCorrect,
+              question_id: resultQuestion.id,
+            });
+          }),
+        );
+      }),
+      // クイズのカテゴリを更新する
+      params.categoryId
+        ? quizCategoryRelationshipsRepository.create(
+            params.quizId,
+            params.categoryId,
+          )
+        : null,
+    ]);
+
+    return {
+      ok: true,
+      id: quiz.id,
+      title: quiz.title,
+    };
+  };
+
+  /**
    * クイズを取得する
    */
   const getAllQuizWithCategory = async (params?: {
@@ -137,6 +209,7 @@ export const QuizService = () => {
   return {
     getQuizWithQuestionsAndOptions,
     createQuizWithQuestionsAndOptions,
+    updateQuizWithQuestionsAndOptions,
     getAllQuizWithCategory,
   };
 };

@@ -1,5 +1,5 @@
 import { createClient } from '~/lib/supabase/supabaseServer';
-import { type TablesInsert } from '~/../supabase/database.types';
+import { TablesUpdate, type TablesInsert } from '~/../supabase/database.types';
 import { SUPABASE_ERROR_CODE } from '~/constants/supabaseErrorCode';
 
 export const QuizRepository = () => {
@@ -64,10 +64,24 @@ export const QuizRepository = () => {
     return data;
   };
 
+  const update = async (id: number, value: TablesUpdate<'quizzes'>) => {
+    const { data, error } = await createClient()
+      .from('quizzes')
+      .update(value)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
   return {
     findById,
     findByUserId,
     findAll,
     create,
+    update,
   };
 };
