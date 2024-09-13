@@ -10,7 +10,8 @@
     "lint": "next lint; prettier --check .",
     "format": "next lint --fix && prettier --write .",
     "typecheck": "tsc --noEmit",
-    "gen-schema": "supabase gen types typescript --project-id otesfyhmjtmofknfezrz --schema public > supabase/database.types.ts"
+    "gen-schema": "supabase gen types typescript --project-id otesfyhmjtmofknfezrz --schema public > supabase/database.types.ts",
+    "test": "vitest"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.1",
