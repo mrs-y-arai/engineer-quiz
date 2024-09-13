@@ -38,7 +38,3 @@ export function generateLineShareUrl(params: { text: string; path: string }) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   return `https://line.me/R/msg/text/?${params.text}%20${baseUrl}${params.path}`;
 }
-
-export function getApiBaseUrl() {
-  return process.env.NEXT_PUBLIC_BASE_URL === 'http://test:3000';
-}
