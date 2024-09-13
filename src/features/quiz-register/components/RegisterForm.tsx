@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { createQuestion } from '~/actions/createQuestion';
 import { useFormState, useFormStatus } from 'react-dom';
@@ -12,9 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select';
-import { CompleteDialog } from './CompleteDialog';
-import { Option } from './Option';
+import { QuestionOption } from '~/components/QuizFormParts/QuestionOption';
+import { QuestionCompleteDialog } from '~/components/QuizFormParts/QuestionCompleteDialog';
 import { Categories } from '~/types/Category';
+import { useQuestionForm } from '~/hooks/useQuestionForm';
 
 type Props = {
   categories: Categories;
@@ -25,78 +26,25 @@ export function RegisterForm({ categories }: Props) {
     errors: { _errors: [] },
     message: null,
   };
-
   const [state, dispatch] = useFormState(createQuestion, initialState);
+
+  const {
+    title,
+    setTitle,
+    description,
+    setDescription,
+    selectedCategory,
+    setSelectedCategory,
+    questions,
+    setQuestions,
+    formRef,
+    resetForm,
+    addQuestion,
+    removeQuestion,
+    handleIsCorrectChange,
+  } = useQuestionForm();
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  /**
-   * 編集フォームにも使いそうなので、state管理にしてる
-   */
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [questions, setQuestions] = useState<
-    {
-      content: string;
-      options: {
-        content: string;
-        isCorrect: boolean;
-      }[];
-    }[]
-  >([
-    {
-      content: '',
-      options: [
-        { content: '', isCorrect: false },
-        { content: '', isCorrect: false },
-        { content: '', isCorrect: false },
-        { content: '', isCorrect: false },
-      ],
-    },
-  ]);
-
-  const resetForm = () => {
-    setTitle('');
-    setDescription('');
-    setSelectedCategory('');
-    setQuestions([
-      {
-        content: '',
-        options: [
-          { content: '', isCorrect: false },
-          { content: '', isCorrect: false },
-          { content: '', isCorrect: false },
-          { content: '', isCorrect: false },
-        ],
-      },
-    ]);
-    formRef.current?.reset();
-  };
-
-  const addQuestion = () => {
-    setQuestions((prevQuestion) => {
-      return [
-        ...prevQuestion,
-        {
-          content: '',
-          options: [
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-          ],
-        },
-      ];
-    });
-  };
-
-  const removeQuestion = (index: number) => {
-    setQuestions((prevQuestions) => {
-      const newQuestions = prevQuestions.filter((_, i) => i !== index);
-      return newQuestions;
-    });
-  };
 
   useEffect(() => {
     if (state.quiz) {
@@ -104,36 +52,6 @@ export function RegisterForm({ categories }: Props) {
       resetForm();
     }
   }, [state.quiz]);
-
-  /**
-   * 正解の選択肢のチェックボックスの変更
-   * @param questionIndex 問題のインデックス
-   * @param optionIndex 選択肢のインデックス
-   * @param isCorrect 正解かどうか
-   */
-  const handleIsCorrectChange = (
-    questionIndex: number,
-    optionIndex: number,
-    isCorrect: boolean,
-  ) => {
-    setQuestions((prevQuestions) =>
-      prevQuestions.map((question, index) => {
-        return index === questionIndex
-          ? {
-              ...question,
-              options: question.options.map((option, optIdx) =>
-                optIdx === optionIndex
-                  ? {
-                      ...option,
-                      isCorrect: isCorrect,
-                    }
-                  : option,
-              ),
-            }
-          : question;
-      }),
-    );
-  };
 
   return (
     <>
@@ -196,99 +114,103 @@ export function RegisterForm({ categories }: Props) {
             <p className="text-center text-sm">
               4択問題を作ります。正解の選択肢に、チェックをつけてください。
             </p>
-            {questions.map((question, questionIndex) => (
-              <div key={questionIndex}>
-                <p className="mb-2 text-center text-base font-bold">
-                  {questionIndex + 1}問目
-                </p>
-                <FormItem>
-                  <Label
-                    label="問題文"
-                    htmlFor={`question${questionIndex + 1}`}
-                    hasError={
-                      !!state.errors?.questions?.[questionIndex]?.content
-                        ?._errors
-                    }
-                  />
-                  <TextArea
-                    className="block"
-                    name="question"
-                    value={questions[questionIndex].content}
-                    onChange={(e) =>
-                      setQuestions((prevQuestions) =>
-                        prevQuestions.map((question, index) =>
-                          index === questionIndex
-                            ? { ...question, content: e.target.value }
-                            : question,
-                        ),
-                      )
-                    }
-                    id={`question${questionIndex + 1}`}
-                    errorMessages={
-                      state.errors?.questions?.[questionIndex]?.content?._errors
-                    }
-                  />
-                </FormItem>
-                <div className="mt-4 grid grid-cols-1 gap-y-3">
-                  {question.options.map((_, optionIndex) => {
-                    return (
-                      <Option
-                        key={optionIndex}
-                        index={optionIndex}
-                        value={
-                          questions[questionIndex].options[optionIndex].content
-                        }
-                        onChange={(e) =>
-                          setQuestions((prevQuestions) =>
-                            prevQuestions.map((question, index) => {
-                              return index === questionIndex
-                                ? {
-                                    ...question,
-                                    options: question.options.map(
-                                      (option, optIdx) =>
-                                        optIdx === optionIndex
-                                          ? {
-                                              ...option,
-                                              content: e.target.value,
-                                            }
-                                          : option,
-                                    ),
-                                  }
-                                : question;
-                            }),
-                          )
-                        }
-                        isCorrectValue={
-                          questions[questionIndex].options[optionIndex]
-                            .isCorrect
-                        }
-                        isCorrectOnChange={handleIsCorrectChange}
-                        questionIndex={questionIndex}
-                        errorMessages={
-                          state.errors?.questions?.[questionIndex]?.options?.[
-                            optionIndex
-                          ]?.content?._errors
-                        }
-                        isCorrect={{
-                          errorMessages:
-                            state.errors?.questions?.[questionIndex]?.options
-                              ?._errors,
-                        }}
-                      />
-                    );
-                  })}
-                  <Button
-                    onClick={() => removeQuestion(questionIndex)}
-                    variant="destructive"
-                    className="mx-auto mt-1"
-                    type="button"
-                    disabled={questions.length < 2}
-                  >
-                    問題削除
-                  </Button>
+            <div className="flex flex-col gap-y-14">
+              {questions.map((question, questionIndex) => (
+                <div key={questionIndex}>
+                  <p className="mb-2 text-center text-base font-bold">
+                    {questionIndex + 1}問目
+                  </p>
+                  <FormItem>
+                    <Label
+                      label="問題文"
+                      htmlFor={`question${questionIndex + 1}`}
+                      hasError={
+                        !!state.errors?.questions?.[questionIndex]?.content
+                          ?._errors
+                      }
+                    />
+                    <TextArea
+                      className="block"
+                      name="question"
+                      value={questions[questionIndex].content}
+                      onChange={(e) =>
+                        setQuestions((prevQuestions) =>
+                          prevQuestions.map((question, index) =>
+                            index === questionIndex
+                              ? { ...question, content: e.target.value }
+                              : question,
+                          ),
+                        )
+                      }
+                      id={`question${questionIndex + 1}`}
+                      errorMessages={
+                        state.errors?.questions?.[questionIndex]?.content
+                          ?._errors
+                      }
+                    />
+                  </FormItem>
+                  <div className="mt-4 grid grid-cols-1 gap-y-3">
+                    {question.options.map((_, optionIndex) => {
+                      return (
+                        <QuestionOption
+                          key={optionIndex}
+                          index={optionIndex}
+                          value={
+                            questions[questionIndex].options[optionIndex]
+                              .content
+                          }
+                          onChange={(e) =>
+                            setQuestions((prevQuestions) =>
+                              prevQuestions.map((question, index) => {
+                                return index === questionIndex
+                                  ? {
+                                      ...question,
+                                      options: question.options.map(
+                                        (option, optIdx) =>
+                                          optIdx === optionIndex
+                                            ? {
+                                                ...option,
+                                                content: e.target.value,
+                                              }
+                                            : option,
+                                      ),
+                                    }
+                                  : question;
+                              }),
+                            )
+                          }
+                          isCorrectValue={
+                            questions[questionIndex].options[optionIndex]
+                              .isCorrect
+                          }
+                          isCorrectOnChange={handleIsCorrectChange}
+                          questionIndex={questionIndex}
+                          errorMessages={
+                            state.errors?.questions?.[questionIndex]?.options?.[
+                              optionIndex
+                            ]?.content?._errors
+                          }
+                          isCorrect={{
+                            errorMessages:
+                              state.errors?.questions?.[questionIndex]?.options
+                                ?._errors,
+                          }}
+                        />
+                      );
+                    })}
+                    <Button
+                      onClick={() => removeQuestion(questionIndex)}
+                      variant="destructive"
+                      className="mx-auto mt-1"
+                      type="button"
+                      disabled={questions.length < 2}
+                    >
+                      問題削除
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
             <Button
               onClick={addQuestion}
               variant="outline"
@@ -301,10 +223,11 @@ export function RegisterForm({ categories }: Props) {
           <SubmitButton />
         </div>
       </form>
-      <CompleteDialog
+      <QuestionCompleteDialog
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
-        createdQuiz={state.quiz}
+        isRegister={true}
+        quiz={state.quiz}
       />
     </>
   );

@@ -18,7 +18,7 @@ type Props = {
   ) => void;
 };
 
-export function Option({
+export function QuestionOption({
   index,
   questionIndex,
   errorMessages,
@@ -56,6 +56,7 @@ export function Option({
             id={`question_${questionIndex + 1}_option_${index + 1}_check`}
             name={`question_${questionIndex + 1}_option_${index + 1}_check`}
             value={isCorrectValue}
+            checked={isCorrectValue}
             onChange={(e) => {
               isCorrectOnChange(questionIndex, index, e);
             }}

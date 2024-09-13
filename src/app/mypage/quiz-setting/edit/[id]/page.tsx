@@ -48,7 +48,7 @@ async function EditContent({ quizId }: { quizId: number }) {
         categories={mappedCategories}
         initialQuiz={{
           ...transformedQuiz,
-          categoryId: quizCategoryRelationships?.category_id,
+          categoryId: String(quizCategoryRelationships?.category_id) || '',
         }}
       />
     </>

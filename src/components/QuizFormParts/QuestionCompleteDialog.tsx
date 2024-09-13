@@ -14,16 +14,18 @@ import { tryRevalidateTag } from '~/actions/tryRevalidateTag';
 type Props = {
   isDialogOpen: boolean;
   setIsDialogOpen: (isDialogOpen: boolean) => void;
-  createdQuiz?: {
+  isRegister: boolean;
+  quiz?: {
     id: number;
     title: string;
   };
 };
 
-export function CompleteDialog({
+export function QuestionCompleteDialog({
   isDialogOpen,
   setIsDialogOpen,
-  createdQuiz,
+  isRegister,
+  quiz,
 }: Props) {
   useEffect(() => {
     tryRevalidateTag('getQuizzes');
@@ -36,25 +38,23 @@ export function CompleteDialog({
           <DialogContent className="min-h-[40svh]">
             <DialogHeader>
               <DialogTitle className="text-center">
-                クイズ更新完了！
+                {isRegister ? 'クイズ作成完了！' : 'クイズ更新完了！'}
               </DialogTitle>
             </DialogHeader>
             <div className="text-center">
-              <p>クイズの更新、ありがとうございます！</p>
               <p>SNSなどで、友達にシェアしよう！</p>
-              {createdQuiz && (
+              {quiz && (
                 <>
                   <Link
-                    href={`/quiz/${createdQuiz.id}`}
+                    href={`/quiz/${quiz.id}`}
                     className="my-4 block underline"
                     prefetch={true}
                   >
-                    クイズURL:{' '}
-                    {`${window.location.origin}/quiz/${createdQuiz.id}`}
+                    クイズURL: {`${window.location.origin}/quiz/${quiz.id}`}
                   </Link>
                   <SnsShare
-                    text={`エンジニアクイズを作りました！${createdQuiz?.title}に挑戦しよう！`}
-                    path={`/quiz/${createdQuiz?.id}`}
+                    text={`エンジニアクイズを作りました！${quiz?.title}に挑戦しよう！`}
+                    path={`/quiz/${quiz?.id}`}
                   />
                 </>
               )}

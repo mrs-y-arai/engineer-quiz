@@ -6,6 +6,7 @@ type CheckboxProps = {
   name: string;
   value: boolean;
   onChange: (checked: boolean) => void;
+  checked: boolean;
   className?: string;
 };
 
@@ -15,6 +16,7 @@ export function Checkbox({
   value,
   onChange,
   className,
+  checked,
   ...props
 }: CheckboxProps) {
   return (
@@ -24,6 +26,7 @@ export function Checkbox({
         name={name}
         value={String(value)}
         onCheckedChange={onChange}
+        checked={checked}
         className={cn(className, 'mt-3 inline-block')}
         {...props}
       />

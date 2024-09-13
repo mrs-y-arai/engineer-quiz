@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { createQuestion } from '~/actions/createQuestion';
 import { useFormState, useFormStatus } from 'react-dom';
@@ -12,26 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select';
-import { CompleteDialog } from './CompleteDialog';
-import { Option } from './Option';
 import { Categories } from '~/types/Category';
+import { useQuestionForm } from '~/hooks/useQuestionForm';
+import { QuizInputValues } from '~/types/QuizInputValues';
+import { QuestionOption } from '~/components/QuizFormParts/QuestionOption';
+import { QuestionCompleteDialog } from '~/components/QuizFormParts/QuestionCompleteDialog';
 
 type Props = {
   categories: Categories;
-  initialQuiz: {
-    id: number;
-    title: string;
-    description: string;
-    categoryId?: number;
-    questions: {
-      id: number;
-      content: string;
-      options: {
-        content: string;
-        isCorrect: boolean;
-      }[];
-    }[];
-  };
+  initialQuiz: QuizInputValues;
 };
 
 export function EditForm({ categories, initialQuiz }: Props) {
@@ -42,67 +31,22 @@ export function EditForm({ categories, initialQuiz }: Props) {
 
   const [state, dispatch] = useFormState(createQuestion, initialState);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
 
-  /**
-   * 編集フォームにも使いそうなので、state管理にしてる
-   */
-  const [title, setTitle] = useState(initialQuiz.title);
-  const [description, setDescription] = useState(initialQuiz.description);
-  const [selectedCategory, setSelectedCategory] = useState(
-    initialQuiz.categoryId?.toString() || '',
-  );
-  const [questions, setQuestions] = useState<
-    {
-      content: string;
-      options: {
-        content: string;
-        isCorrect: boolean;
-      }[];
-    }[]
-  >(initialQuiz.questions);
-
-  const resetForm = () => {
-    setTitle('');
-    setDescription('');
-    setSelectedCategory('');
-    setQuestions([
-      {
-        content: '',
-        options: [
-          { content: '', isCorrect: false },
-          { content: '', isCorrect: false },
-          { content: '', isCorrect: false },
-          { content: '', isCorrect: false },
-        ],
-      },
-    ]);
-    formRef.current?.reset();
-  };
-
-  const addQuestion = () => {
-    setQuestions((prevQuestion) => {
-      return [
-        ...prevQuestion,
-        {
-          content: '',
-          options: [
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-          ],
-        },
-      ];
-    });
-  };
-
-  const removeQuestion = (index: number) => {
-    setQuestions((prevQuestions) => {
-      const newQuestions = prevQuestions.filter((_, i) => i !== index);
-      return newQuestions;
-    });
-  };
+  const {
+    title,
+    setTitle,
+    description,
+    setDescription,
+    selectedCategory,
+    setSelectedCategory,
+    questions,
+    setQuestions,
+    formRef,
+    resetForm,
+    addQuestion,
+    removeQuestion,
+    handleIsCorrectChange,
+  } = useQuestionForm();
 
   useEffect(() => {
     if (state.quiz) {
@@ -110,36 +54,6 @@ export function EditForm({ categories, initialQuiz }: Props) {
       resetForm();
     }
   }, [state.quiz]);
-
-  /**
-   * 正解の選択肢のチェックボックスの変更
-   * @param questionIndex 問題のインデックス
-   * @param optionIndex 選択肢のインデックス
-   * @param isCorrect 正解かどうか
-   */
-  const handleIsCorrectChange = (
-    questionIndex: number,
-    optionIndex: number,
-    isCorrect: boolean,
-  ) => {
-    setQuestions((prevQuestions) =>
-      prevQuestions.map((question, index) => {
-        return index === questionIndex
-          ? {
-              ...question,
-              options: question.options.map((option, optIdx) =>
-                optIdx === optionIndex
-                  ? {
-                      ...option,
-                      isCorrect: isCorrect,
-                    }
-                  : option,
-              ),
-            }
-          : question;
-      }),
-    );
-  };
 
   return (
     <>
@@ -239,7 +153,7 @@ export function EditForm({ categories, initialQuiz }: Props) {
                 <div className="mt-4 grid grid-cols-1 gap-y-3">
                   {question.options.map((_, optionIndex) => {
                     return (
-                      <Option
+                      <QuestionOption
                         key={optionIndex}
                         index={optionIndex}
                         value={
@@ -308,10 +222,11 @@ export function EditForm({ categories, initialQuiz }: Props) {
           <SubmitButton />
         </div>
       </form>
-      <CompleteDialog
+      <QuestionCompleteDialog
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
-        createdQuiz={state.quiz}
+        quiz={state.quiz}
+        isRegister={false}
       />
     </>
   );
@@ -325,7 +240,7 @@ function SubmitButton() {
       type="submit"
       isProcessing={pending}
     >
-      作成
+      更新
     </Button>
   );
 }
