@@ -8,6 +8,7 @@ export default defineConfig({
     include: ['src/**/*.spec.ts'],
     environment: 'jsdom',
     coverage: {
+      enabled: true,
       provider: 'v8',
       all: true,
       include: ['**/hooks/**/*.ts', '**/utils/**/*.ts'],
