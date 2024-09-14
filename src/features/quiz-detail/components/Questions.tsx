@@ -19,7 +19,11 @@ export function Questions({ questions, answers, handleAnswer }: Props) {
                 index={index}
                 handleAnswer={handleAnswer}
               />
-            ) : null}
+            ) : (
+              <>
+                <p className="text-center">問題がありません。</p>
+              </>
+            )}
           </div>
         );
       })}

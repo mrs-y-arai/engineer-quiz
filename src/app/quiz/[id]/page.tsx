@@ -1,8 +1,9 @@
-import { QuizDetailContent } from '~/features/quiz-detail/components/QuizDetailContent';
 import { QuizService } from '~/server/services/QuizService';
 import { snakeToCamel } from '~/utils';
 import { redirect } from 'next/navigation';
-import { Questions } from '~/types/Question';
+import { QuizDetailPresentation } from '~/features/quiz-detail/QuizDetailPresentation';
+import { Suspense } from 'react';
+import { LoadingUI } from '~/components/Loading/LoadingUI';
 
 export default async function QuizDetailPage({
   params,
@@ -10,6 +11,17 @@ export default async function QuizDetailPage({
   params: { id: string };
 }) {
   const quizId = parseInt(params.id, 10);
+
+  return (
+    <div className="mx-auto max-w-[700px]">
+      <Suspense fallback={<LoadingUI />}>
+        <QuizDetailContainer quizId={quizId} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function QuizDetailContainer({ quizId }: { quizId: number }) {
   const { getQuizWithQuestionsAndOptions } = QuizService();
   const quiz = await getQuizWithQuestionsAndOptions(quizId);
 
@@ -35,42 +47,15 @@ export default async function QuizDetailPage({
   const camelCaseQuestions = snakeToCamel(transformedQuestions);
 
   return (
-    <div className="mx-auto max-w-[700px]">
-      <QuizDetail
+    <>
+      <h1 className="headline mb-4 text-center">{quiz.title}</h1>
+      <QuizDetailPresentation
         quiz={{
           id: quiz.id,
           title: quiz.title,
           description: quiz.description,
         }}
         questions={camelCaseQuestions}
-      />
-    </div>
-  );
-}
-
-/**
- * ページがレンダリングされるタイミングで発火させるデータ取得処理
- * @param id
- */
-type Props = {
-  quiz: {
-    id: number;
-    title: string;
-    description: string;
-  };
-  questions: Questions;
-};
-function QuizDetail({ questions, quiz }: Props) {
-  return (
-    <>
-      <h1 className="headline mb-4 text-center">{quiz.title}</h1>
-      <QuizDetailContent
-        quiz={{
-          id: quiz.id,
-          title: quiz.title,
-          description: quiz.description,
-        }}
-        questions={questions}
       />
     </>
   );
