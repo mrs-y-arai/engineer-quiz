@@ -11,7 +11,7 @@ export default defineConfig({
       enabled: true,
       provider: 'v8',
       all: true,
-      include: ['**/hooks/**/*.ts', '**/utils/**/*.ts'],
+      include: ['**/hooks/**/*.ts', '**/utils/**/*.ts', '**/types/**/*.ts'],
       reportsDirectory: 'test-reports',
     },
     env: dotenv.config({ path: '.env.test' }).parsed,

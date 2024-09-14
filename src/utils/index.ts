@@ -3,22 +3,22 @@
  * @param obj - The object to convert.
  * @returns The converted object.
  */
-export function snakeToCamel<T>(obj: T): T {
+export function snakeToCamel<T, U = T>(obj: T): U {
   if (typeof obj !== 'object' || obj === null) {
-    return obj;
+    return obj as unknown as U;
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(snakeToCamel) as T;
+    return obj.map(snakeToCamel) as U;
   }
 
   // オブジェクトの場合
   return Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [
-      key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase()),
+      key.replace(/_([a-z0-9])/g, (_, letter) => letter.toUpperCase()),
       snakeToCamel(value),
     ]),
-  ) as T;
+  ) as U;
 }
 
 /**
