@@ -32,7 +32,7 @@ export default function LoginPage() {
         >
           X(Twitter) Login
         </Button>
-        <p className="mx-auto mt-4 max-w-[340px] text-center text-sm text-gray-strong">
+        <p className="mx-auto mt-4 max-w-[340px] text-center text-sm text-foreground">
           X(Twitter)の連携は、クイズの作成者を特定するために使用します。
           それ以外では使用しません。
         </p>
