@@ -46,7 +46,7 @@ export function EditForm({ categories, initialQuiz }: Props) {
     addQuestion,
     removeQuestion,
     handleIsCorrectChange,
-  } = useQuestionForm();
+  } = useQuestionForm(initialQuiz);
 
   useEffect(() => {
     if (state.quiz) {
