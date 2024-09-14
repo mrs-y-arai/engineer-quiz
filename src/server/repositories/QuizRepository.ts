@@ -76,6 +76,12 @@ export const QuizRepository = () => {
     if (error) {
       throw new Error(error.message);
     }
+
+    return {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+    };
   };
 
   return {
