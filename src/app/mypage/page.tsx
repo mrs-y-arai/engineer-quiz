@@ -64,11 +64,11 @@ async function QuizList() {
                 <li key={quiz.id} className="border-b">
                   <Link
                     className="flex items-center justify-between p-4 duration-200 hover:bg-primary/5"
-                    href={`/quiz/${quiz.id}`}
+                    href={`/mypage/quiz-setting/edit/${quiz.id}`}
                     prefetch={true}
                   >
                     {quiz.title}
-                    {quiz.category && <p>#{quiz.category.name}</p>}
+                    <Button variant="outline">編集する</Button>
                   </Link>
                 </li>
               );
