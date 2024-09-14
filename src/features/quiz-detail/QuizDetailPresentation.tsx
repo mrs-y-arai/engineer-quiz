@@ -1,10 +1,10 @@
 'use client';
 
-import { CorrectDialog } from './CorrectDialog';
-import { InCorrectDialog } from './InCorrectDialog';
-import { DescriptionDialog } from './DescriptionDialog';
-import { useQuizProgress } from '../hooks/useQuizProgress';
-import { Questions } from './Questions';
+import { CorrectDialog } from './components/CorrectDialog';
+import { InCorrectDialog } from './components/InCorrectDialog';
+import { DescriptionDialog } from './components/DescriptionDialog';
+import { useQuizProgress } from './hooks/useQuizProgress';
+import { Questions } from './components/Questions';
 import { Button } from '~/components/ui/button';
 import Link from 'next/link';
 import { Questions as QuestionsType } from '~/types/Question';
@@ -18,7 +18,7 @@ type Props = {
   questions: QuestionsType;
 };
 
-export function QuizDetailContent({ questions, quiz }: Props) {
+export function QuizDetailPresentation({ questions, quiz }: Props) {
   const {
     handleAnswer,
     answers,

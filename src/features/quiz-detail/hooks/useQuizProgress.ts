@@ -8,7 +8,7 @@ import { Option } from '~/types/Option';
  * クイズの回答状況を管理する
  */
 export const useQuizProgress = (questions: QuestionsType) => {
-  const QUESTION_s = questions;
+  const QUESTIONS = questions;
 
   /**
    * 回答結果
@@ -56,10 +56,10 @@ export const useQuizProgress = (questions: QuestionsType) => {
     correctAnswer: Option;
   } => {
     // 答えたクイズを取得
-    const quizTarget = QUESTION_s.find((quiz) => quiz.id === params.quizId);
+    const quizTarget = QUESTIONS.find((quiz) => quiz.id === params.quizId);
 
     // TODO: あとでエラーハンドリング
-    if (!quizTarget) throw new Error('エラー');
+    if (!quizTarget) throw new Error('存在しない選択肢です。');
 
     // 正誤チェック
     const correctAnswer = quizTarget.options.find(
@@ -87,7 +87,7 @@ export const useQuizProgress = (questions: QuestionsType) => {
   const calcTotalScore = () => {
     // 正解した数とクイズの合計数を比較して、正解率を計算。小数点切り上げ
     const totalScore = Math.ceil(
-      (answers.filter((answer) => answer).length / QUESTION_s.length) * 100,
+      (answers.filter((answer) => answer).length / QUESTIONS.length) * 100,
     );
     setTotalScore(totalScore);
   };
@@ -107,7 +107,7 @@ export const useQuizProgress = (questions: QuestionsType) => {
   };
 
   useEffect(() => {
-    if (QUESTION_s.length === answers.length) {
+    if (QUESTIONS.length === answers.length) {
       calcTotalScore();
     }
   }, [answers.length]);
