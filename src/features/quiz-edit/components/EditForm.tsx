@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
-import { createQuestion } from '~/actions/createQuestion';
+import { updateQuestion } from '~/actions/updateQuestion';
 import { useFormState, useFormStatus } from 'react-dom';
 import { Label, Input, FormItem, TextArea } from '~/components/Form';
 import {
@@ -29,7 +29,7 @@ export function EditForm({ categories, initialQuiz }: Props) {
     message: null,
   };
 
-  const [state, dispatch] = useFormState(createQuestion, initialState);
+  const [state, dispatch] = useFormState(updateQuestion, initialState);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const {

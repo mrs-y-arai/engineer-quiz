@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   const url = headers().get('x-url') || '';
   const pathname = new URL(url).pathname;
-  const hasFixedMenu = !pathname.includes('/mypage/quiz-setting/register');
+  const hasFixedMenu = !pathname.startsWith('/mypage/quiz-setting');
 
   return (
     <html lang="ja">
