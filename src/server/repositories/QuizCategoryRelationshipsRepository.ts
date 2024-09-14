@@ -1,13 +1,17 @@
 import { createClient } from '~/lib/supabase/supabaseServer';
 import { SUPABASE_ERROR_CODE } from '~/constants/supabaseErrorCode';
+import { type TablesInsert } from '~/../supabase/database.types';
 
 export const QuizCategoryRelationshipsRepository = () => {
-  const create = async (quizId: number, categoryId: number) => {
+  const create = async (
+    values: TablesInsert<'quizzes_categories_relationships'>,
+  ) => {
     const { data, error } = await createClient()
       .from('quizzes_categories_relationships')
       .insert({
-        quiz_id: quizId,
-        category_id: categoryId,
+        quiz_id: values.quiz_id,
+        category_id: values.category_id,
+        user_id: values.user_id,
       })
       .select()
       .single();

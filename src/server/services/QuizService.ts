@@ -70,6 +70,7 @@ export const QuizService = () => {
         const resultQuestion = await questionRepository.create({
           content: question.content,
           quiz_id: quiz.id,
+          user_id: params.userId,
         });
 
         await Promise.all(
@@ -78,12 +79,17 @@ export const QuizService = () => {
               content: option.content,
               is_correct: option.isCorrect,
               question_id: resultQuestion.id,
+              user_id: params.userId,
             });
           }),
         );
       }),
       params.categoryId
-        ? quizCategoryRelationshipsRepository.create(quiz.id, params.categoryId)
+        ? quizCategoryRelationshipsRepository.create({
+            quiz_id: quiz.id,
+            category_id: params.categoryId,
+            user_id: params.userId,
+          })
         : null,
     ]);
 
@@ -98,6 +104,7 @@ export const QuizService = () => {
    * クイズ1つ分のまとまりを更新する
    */
   const updateQuizWithQuestionsAndOptions = async (params: {
+    userId: string;
     quizId: number;
     title: string;
     description: string;
@@ -138,6 +145,7 @@ export const QuizService = () => {
         const resultQuestion = await questionRepository.create({
           content: question.content,
           quiz_id: params.quizId,
+          user_id: params.userId,
         });
 
         await Promise.all(
@@ -152,10 +160,11 @@ export const QuizService = () => {
       }),
       // クイズのカテゴリを更新する
       params.categoryId
-        ? quizCategoryRelationshipsRepository.create(
-            params.quizId,
-            params.categoryId,
-          )
+        ? quizCategoryRelationshipsRepository.create({
+            quiz_id: params.quizId,
+            category_id: params.categoryId,
+            user_id: params.userId,
+          })
         : null,
     ]);
 

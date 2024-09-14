@@ -7,14 +7,13 @@ const unPublishedRoutes = ['/mypage/quiz-setting/edit'];
 
 export async function middleware(request: NextRequest) {
   // 非表示ページアクセス時の設定
-  if (
-    unPublishedRoutes.some((route) =>
-      request.nextUrl.pathname.startsWith(route),
-    )
-  ) {
-    return NextResponse.redirect(new URL(`/`, request.url));
-  }
-
+  // if (
+  //   unPublishedRoutes.some((route) =>
+  //     request.nextUrl.pathname.startsWith(route),
+  //   )
+  // ) {
+  //   return NextResponse.redirect(new URL(`/`, request.url));
+  // }
   if (protectedRoutes.includes(request.nextUrl.pathname)) {
     const supabase = createClient();
     const { data, error } = await supabase.auth.getUser();
