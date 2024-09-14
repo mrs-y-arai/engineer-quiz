@@ -20,11 +20,12 @@ export const QuizRepository = () => {
     return data;
   };
 
-  const findByUserId = async (userId: string) => {
+  const findByUserId = async (userId: string, limit: number = 100) => {
     const { data, error } = await createClient()
       .from('quizzes')
       .select('*')
       .eq('user_id', userId)
+      .limit(limit)
       .order('created_at', { ascending: false });
 
     if (error) {
