@@ -67,6 +67,7 @@ export const updateQuestion = async (
 
   const { updateQuizWithQuestionsAndOptions } = QuizService();
   const result = await updateQuizWithQuestionsAndOptions({
+    userId: user.id,
     quizId: id,
     title: validatedFields.data.title,
     description: validatedFields.data.description,
