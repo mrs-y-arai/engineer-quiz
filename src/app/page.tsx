@@ -66,7 +66,7 @@ async function QuizList() {
                     href={`/quiz/${quiz.id}`}
                     prefetch={true}
                   >
-                    {quiz.title}
+                    <span className="line-clamp-2">{quiz.title}</span>
                     {quiz.category && <p>#{quiz.category.name}</p>}
                   </Link>
                 </li>

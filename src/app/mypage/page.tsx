@@ -67,7 +67,7 @@ async function QuizList() {
                     href={`/mypage/quiz-setting/edit/${quiz.id}`}
                     prefetch={true}
                   >
-                    {quiz.title}
+                    <span className="line-clamp-2">{quiz.title}</span>
                     <Button variant="outline">編集する</Button>
                   </Link>
                 </li>

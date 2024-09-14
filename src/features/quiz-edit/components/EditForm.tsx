@@ -51,7 +51,6 @@ export function EditForm({ categories, initialQuiz }: Props) {
   useEffect(() => {
     if (state.quiz) {
       setIsDialogOpen(true);
-      resetForm();
     }
   }, [state.quiz]);
 
