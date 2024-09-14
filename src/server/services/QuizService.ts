@@ -123,18 +123,16 @@ export const QuizService = () => {
     const questions = await questionRepository.findByQuizId(params.quizId);
 
     // クイズの質問・選択肢・カテゴリを削除する
+    // リレーションの関係で、options → questions → quizCategoryRelationshipsの順番で削除する。
     await Promise.all([
       questions.map(async (question) => {
-        await Promise.all([
-          optionRepository.deleteByQuestionId(question.id),
-          questionRepository.deleteById(question.id),
-        ]);
+        await optionRepository.deleteByQuestionId(question.id);
+        await questionRepository.deleteById(question.id);
       }),
-      quizCategoryRelationshipsRepository.deleteByQuizId(params.quizId),
     ]);
-
+    await quizCategoryRelationshipsRepository.deleteByQuizId(params.quizId);
     // クイズの質問・選択肢・カテゴリをupdateする
-    await Promise.all([
+    const [quizResult] = await Promise.all([
       // クイズのタイトルと説明を更新する
       quizRepository.update(params.quizId, {
         title: params.title,
@@ -170,8 +168,8 @@ export const QuizService = () => {
 
     return {
       ok: true,
-      id: quiz.id,
-      title: quiz.title,
+      id: quizResult.id,
+      title: quizResult.title,
     };
   };
 
