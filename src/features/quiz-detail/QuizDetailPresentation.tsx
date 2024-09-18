@@ -9,7 +9,7 @@ import { Button } from '~/components/ui/button';
 import Link from 'next/link';
 import { Questions as QuestionsType } from '~/types/Question';
 
-type Props = {
+export type Props = {
   quiz: {
     id: number;
     title: string;
@@ -37,7 +37,9 @@ export function QuizDetailPresentation({ questions, quiz }: Props) {
         answers={answers}
         handleAnswer={handleAnswer}
       />
-      {answers.length === questions.length ? (
+      {questions.length === 0 ? (
+        <p className="mb-4 text-center text-xl font-bold">問題がありません。</p>
+      ) : answers.length === questions.length ? (
         <>
           <p className="mb-4 text-center text-xl font-bold">回答終了!</p>
           {/* リンクにパラメーターを詰める */}
