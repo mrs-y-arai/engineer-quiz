@@ -152,6 +152,7 @@ export const QuizService = () => {
               content: option.content,
               is_correct: option.isCorrect,
               question_id: resultQuestion.id,
+              user_id: params.userId,
             });
           }),
         );
