@@ -10,8 +10,6 @@ export const useQuestionForm = (
 ) => {
   const formRef = useRef<HTMLFormElement>(null);
 
-  console.log('initialStatus', initialStatus);
-
   /**
    * 編集フォームにも使いそうなので、state管理にしてる
    */
