@@ -13,11 +13,16 @@ export function StatusRadioGroup({ status, setStatus, errorMessages }: Props) {
     <>
       <RadioGroup defaultValue={status} onValueChange={setStatus}>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value={QUIZ_STATUS_ITEM.PUBLISHED} id="published" />
+          <RadioGroupItem
+            checked={status === QUIZ_STATUS_ITEM.PUBLISHED}
+            value={QUIZ_STATUS_ITEM.PUBLISHED}
+            id="published"
+          />
           <Label label="公開" htmlFor="published" />
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem
+            checked={status === QUIZ_STATUS_ITEM.UNPUBLISHED}
             value={QUIZ_STATUS_ITEM.UNPUBLISHED}
             id="unpublished"
           />

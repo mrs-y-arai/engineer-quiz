@@ -47,7 +47,7 @@ async function EditContent({ quizId }: { quizId: number }) {
     <>
       <EditForm
         categories={mappedCategories}
-        isPublished={transformedQuiz.is_published}
+        isPublished={transformedQuiz.isPublished}
         initialQuiz={{
           ...transformedQuiz,
           categoryId: String(quizCategoryRelationships?.category_id) || '',

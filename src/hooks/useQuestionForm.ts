@@ -4,7 +4,10 @@ import { useState, useRef } from 'react';
 import { QuizInputValues } from '~/types/QuizInputValues';
 import { QUIZ_STATUS_ITEM, type QuizStatus } from '~/types/QuizForm';
 
-export const useQuestionForm = (initialQuiz?: QuizInputValues) => {
+export const useQuestionForm = (
+  initialQuiz?: QuizInputValues,
+  initialStatus?: QuizStatus,
+) => {
   const formRef = useRef<HTMLFormElement>(null);
 
   /**
@@ -17,7 +20,9 @@ export const useQuestionForm = (initialQuiz?: QuizInputValues) => {
   const [selectedCategory, setSelectedCategory] = useState(
     String(initialQuiz?.categoryId) || '',
   );
-  const [status, setStatus] = useState<QuizStatus>(QUIZ_STATUS_ITEM.PUBLISHED);
+  const [status, setStatus] = useState<QuizStatus>(
+    initialStatus ?? QUIZ_STATUS_ITEM.PUBLISHED,
+  );
   const [questions, setQuestions] = useState<
     {
       content: string;
