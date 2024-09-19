@@ -58,11 +58,13 @@ export const QuizService = () => {
       }[];
     }[];
     categoryId?: number;
+    isPublished: boolean;
   }) => {
     const quiz = await quizRepository.create({
       title: params.title,
       description: params.description,
       user_id: params.userId,
+      is_published: params.isPublished,
     });
 
     await Promise.all([

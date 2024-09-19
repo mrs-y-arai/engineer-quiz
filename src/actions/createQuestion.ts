@@ -1,10 +1,14 @@
 'use server';
-import { QuizFormState, quizFormSchema } from '~/types/QuizForm';
+import {
+  QuizFormState,
+  quizFormSchema,
+  QUIZ_STATUS_ITEM,
+} from '~/types/QuizForm';
 import { QuizService } from '~/server/services/QuizService';
 import { AuthRepository } from '~/server/repositories/AuthRepository';
 
 export const createQuestion = async (
-  state: QuizFormState,
+  _state: QuizFormState,
   formData: FormData,
 ): Promise<QuizFormState> => {
   const user = await AuthRepository().getUser();
@@ -38,12 +42,15 @@ export const createQuestion = async (
     ? Number(formData.get('categoryId'))
     : undefined;
 
+  const status = formData.get('status');
+
   // ユーザースキーマによるバリデーション
   const validatedFields = quizFormSchema.safeParse({
     title: formData.get('title'),
     description: formData.get('description'),
     questions: mappedQuestions,
     categoryId,
+    status,
   });
 
   if (!validatedFields.success) {
@@ -63,6 +70,7 @@ export const createQuestion = async (
     description: validatedFields.data.description,
     questions: validatedFields.data.questions,
     categoryId: validatedFields.data.categoryId,
+    isPublished: validatedFields.data.status === QUIZ_STATUS_ITEM.PUBLISHED,
   });
 
   return {
