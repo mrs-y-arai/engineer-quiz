@@ -16,8 +16,6 @@ import { QuestionOption } from '~/components/QuizFormParts/QuestionOption';
 import { QuestionCompleteDialog } from '~/components/QuizFormParts/QuestionCompleteDialog';
 import { Categories } from '~/types/Category';
 import { useQuestionForm } from '~/hooks/useQuestionForm';
-import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
-import { QUIZ_STATUS_ITEM } from '~/types/QuizForm';
 import { StatusRadioGroup } from '~/components/QuizFormParts/StatusRadioGroup';
 
 type Props = {

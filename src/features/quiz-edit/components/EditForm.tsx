@@ -15,15 +15,18 @@ import {
 import { Categories } from '~/types/Category';
 import { useQuestionForm } from '~/hooks/useQuestionForm';
 import { QuizInputValues } from '~/types/QuizInputValues';
+import { QUIZ_STATUS_ITEM } from '~/types/QuizForm';
 import { QuestionOption } from '~/components/QuizFormParts/QuestionOption';
 import { QuestionCompleteDialog } from '~/components/QuizFormParts/QuestionCompleteDialog';
+import { StatusRadioGroup } from '~/components/QuizFormParts/StatusRadioGroup';
 
 type Props = {
   categories: Categories;
+  isPublished: boolean;
   initialQuiz: QuizInputValues;
 };
 
-export function EditForm({ categories, initialQuiz }: Props) {
+export function EditForm({ categories, isPublished, initialQuiz }: Props) {
   const initialState = {
     errors: { _errors: [] },
     message: null,
@@ -42,11 +45,18 @@ export function EditForm({ categories, initialQuiz }: Props) {
     questions,
     setQuestions,
     formRef,
-    resetForm,
     addQuestion,
     removeQuestion,
     handleIsCorrectChange,
+    status,
+    setStatus,
   } = useQuestionForm(initialQuiz);
+
+  useEffect(() => {
+    setStatus(
+      isPublished ? QUIZ_STATUS_ITEM.PUBLISHED : QUIZ_STATUS_ITEM.UNPUBLISHED,
+    );
+  }, []);
 
   useEffect(() => {
     if (state.quiz) {
@@ -218,6 +228,18 @@ export function EditForm({ categories, initialQuiz }: Props) {
               問題追加
             </Button>
           </div>
+          <FormItem>
+            <Label
+              label="ステータス"
+              htmlFor="status"
+              hasError={!!state.errors?.status?._errors}
+            />
+            <StatusRadioGroup
+              status={status}
+              setStatus={setStatus}
+              errorMessages={state.errors?.status?._errors}
+            />
+          </FormItem>
           <SubmitButton />
         </div>
       </form>

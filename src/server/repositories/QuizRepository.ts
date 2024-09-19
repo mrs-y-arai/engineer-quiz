@@ -8,6 +8,7 @@ export const QuizRepository = () => {
       .from('quizzes')
       .select('*')
       .eq('id', id)
+      .eq('is_published', true)
       .single();
 
     if (error) {
@@ -25,6 +26,7 @@ export const QuizRepository = () => {
       .from('quizzes')
       .select('*')
       .eq('user_id', userId)
+      .eq('is_published', true)
       .limit(limit)
       .order('created_at', { ascending: false });
 
@@ -39,6 +41,7 @@ export const QuizRepository = () => {
     const { data, error } = await createClient()
       .from('quizzes')
       .select('*')
+      .eq('is_published', true)
       .limit(limit)
       .order('created_at', { ascending: false });
 

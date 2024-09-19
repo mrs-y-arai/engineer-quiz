@@ -40,6 +40,7 @@ export const QuizService = () => {
       title: quiz.title,
       description: quiz.description,
       questions: questionWithOptions,
+      isPublished: quiz.is_published,
     };
   };
 
@@ -117,6 +118,7 @@ export const QuizService = () => {
         isCorrect: boolean;
       }[];
     }[];
+    isPublished: boolean;
     categoryId?: number;
   }) => {
     const quiz = await quizRepository.findById(params.quizId);
@@ -139,6 +141,7 @@ export const QuizService = () => {
       quizRepository.update(params.quizId, {
         title: params.title,
         description: params.description,
+        is_published: params.isPublished,
       }),
       // クイズの質問と選択肢を更新する
       ...params.questions.map(async (question) => {
