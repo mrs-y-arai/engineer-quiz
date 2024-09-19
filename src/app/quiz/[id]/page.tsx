@@ -23,7 +23,7 @@ export default async function QuizDetailPage({
 
 async function QuizDetailContainer({ quizId }: { quizId: number }) {
   const { getQuizWithQuestionsAndOptions } = QuizService();
-  const quiz = await getQuizWithQuestionsAndOptions(quizId);
+  const quiz = await getQuizWithQuestionsAndOptions(quizId, true);
 
   if (!quiz) {
     redirect('/');

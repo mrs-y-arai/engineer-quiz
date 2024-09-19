@@ -3,13 +3,14 @@ import { TablesUpdate, type TablesInsert } from '~/../supabase/database.types';
 import { SUPABASE_ERROR_CODE } from '~/constants/supabaseErrorCode';
 
 export const QuizRepository = () => {
-  const findById = async (id: number) => {
-    const { data, error } = await createClient()
-      .from('quizzes')
-      .select('*')
-      .eq('id', id)
-      .eq('is_published', true)
-      .single();
+  const findById = async (id: number, isPublished?: boolean) => {
+    const query = createClient().from('quizzes').select('*').eq('id', id);
+
+    if (isPublished) {
+      query.eq('is_published', isPublished);
+    }
+
+    const { data, error } = await query.single();
 
     if (error) {
       if (error.code === SUPABASE_ERROR_CODE.NO_DATA) {
@@ -26,7 +27,6 @@ export const QuizRepository = () => {
       .from('quizzes')
       .select('*')
       .eq('user_id', userId)
-      .eq('is_published', true)
       .limit(limit)
       .order('created_at', { ascending: false });
 
@@ -37,11 +37,14 @@ export const QuizRepository = () => {
     return data;
   };
 
-  const findAll = async (limit: number = 10) => {
-    const { data, error } = await createClient()
-      .from('quizzes')
-      .select('*')
-      .eq('is_published', true)
+  const findAll = async (limit: number = 10, isPublished?: boolean) => {
+    const query = createClient().from('quizzes').select('*');
+
+    if (isPublished) {
+      query.eq('is_published', isPublished);
+    }
+
+    const { data, error } = await query
       .limit(limit)
       .order('created_at', { ascending: false });
 
