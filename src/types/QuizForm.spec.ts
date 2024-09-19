@@ -1,5 +1,6 @@
 import { expect, it, describe } from 'vitest';
 import { quizFormSchema } from './QuizForm';
+import { QUIZ_STATUS_ITEM } from './QuizForm';
 
 describe('quizFormSchema', () => {
   it('正常系(errorsが空配列)', () => {
@@ -30,6 +31,7 @@ describe('quizFormSchema', () => {
           ],
         },
       ],
+      status: QUIZ_STATUS_ITEM.PUBLISHED,
     };
 
     // Act
@@ -67,10 +69,13 @@ describe('quizFormSchema', () => {
           ],
         },
       ],
+      status: undefined,
     };
 
     // Act
     const result = quizFormSchema.safeParse(inputValues);
+
+    console.log(result.error?.errors);
 
     // Assert
     expect(result.success).toBe(false);
@@ -99,6 +104,11 @@ describe('quizFormSchema', () => {
         (error) => error.message === '正解の選択肢を1つ選択してください',
       ),
     ).toBeDefined();
+    expect(
+      result.error?.errors.find(
+        (error) => error.message === 'ステータスは必須です',
+      ),
+    ).toBeDefined();
   });
 
   it('異常系(問題が1つも設定されていない)', () => {
@@ -107,6 +117,7 @@ describe('quizFormSchema', () => {
       title: 'タイトル',
       description: '説明文',
       questions: [],
+      status: QUIZ_STATUS_ITEM.PUBLISHED,
     };
 
     // Act
@@ -149,6 +160,7 @@ describe('quizFormSchema', () => {
           ],
         },
       ],
+      status: QUIZ_STATUS_ITEM.PUBLISHED,
     };
 
     // Act

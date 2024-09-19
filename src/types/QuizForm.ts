@@ -1,5 +1,12 @@
 import { z, type ZodFormattedError } from 'zod';
 
+export const QUIZ_STATUS_ITEM = {
+  PUBLISHED: 'published',
+  UNPUBLISHED: 'unpublished',
+} as const;
+
+type QuizStatus = (typeof QUIZ_STATUS_ITEM)[keyof typeof QUIZ_STATUS_ITEM];
+
 export type QuizFormState = {
   message: string | null;
   isSuccess?: boolean;
@@ -18,6 +25,7 @@ export type QuizFormState = {
           isCorrect: 'on' | null;
         }[];
       }[];
+      status: QuizStatus;
     },
     string
   >;
@@ -53,4 +61,7 @@ export const quizFormSchema = z.object({
     .array()
     .nonempty({ message: '問題は最低1つ以上必要です' }),
   categoryId: z.number().optional(),
+  status: z.nativeEnum(QUIZ_STATUS_ITEM, {
+    required_error: 'ステータスは必須です',
+  }),
 });
