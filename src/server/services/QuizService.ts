@@ -16,9 +16,12 @@ export const QuizService = () => {
   /**
    * クイズ1つ分のまとまりを取得する
    */
-  const getQuizWithQuestionsAndOptions = async (id: number) => {
+  const getQuizWithQuestionsAndOptions = async (
+    id: number,
+    isPublished?: boolean,
+  ) => {
     const [quiz, questions] = await Promise.all([
-      quizRepository.findById(id),
+      quizRepository.findById(id, isPublished),
       questionRepository.findByQuizId(id),
     ]);
 
@@ -184,10 +187,11 @@ export const QuizService = () => {
    */
   const getAllQuizWithCategory = async (params?: {
     userId?: string;
+    isPublished?: boolean;
   }): Promise<QuizList> => {
     const quizzes = params?.userId
       ? await quizRepository.findByUserId(params.userId)
-      : await quizRepository.findAll(100);
+      : await quizRepository.findAll(100, params?.isPublished);
 
     const quizzesWithCategory = await Promise.all(
       quizzes.map(async (quiz) => {

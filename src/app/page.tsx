@@ -43,7 +43,7 @@ export default async function Home() {
 
 async function QuizList() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const response = await fetch(`${baseUrl}/api/quizzes`, {
+  const response = await fetch(`${baseUrl}/api/quizzes?is-published=true`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
