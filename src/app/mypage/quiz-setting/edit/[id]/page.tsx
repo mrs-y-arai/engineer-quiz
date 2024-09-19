@@ -40,12 +40,14 @@ async function EditContent({ quizId }: { quizId: number }) {
     );
   }
 
+  // TODO: 型をきちんと指定する
   const transformedQuiz = snakeToCamel<any>(quiz);
 
   return (
     <>
       <EditForm
         categories={mappedCategories}
+        isPublished={transformedQuiz.is_published}
         initialQuiz={{
           ...transformedQuiz,
           categoryId: String(quizCategoryRelationships?.category_id) || '',

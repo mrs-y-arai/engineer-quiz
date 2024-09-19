@@ -1,7 +1,11 @@
 'use server';
 import { QuizService } from '~/server/services/QuizService';
 import { AuthRepository } from '~/server/repositories/AuthRepository';
-import { QuizFormState, quizFormSchema } from '~/types/QuizForm';
+import {
+  QuizFormState,
+  quizFormSchema,
+  QUIZ_STATUS_ITEM,
+} from '~/types/QuizForm';
 
 export const updateQuestion = async (
   state: QuizFormState,
@@ -38,6 +42,8 @@ export const updateQuestion = async (
     ? Number(formData.get('categoryId'))
     : undefined;
 
+  const status = formData.get('status');
+
   // ユーザースキーマによるバリデーション
   const validatedFields = quizFormSchema.safeParse({
     id: formData.get('id'),
@@ -45,6 +51,7 @@ export const updateQuestion = async (
     description: formData.get('description'),
     questions: mappedQuestions,
     categoryId,
+    status,
   });
 
   if (!validatedFields.success) {
@@ -73,6 +80,7 @@ export const updateQuestion = async (
     description: validatedFields.data.description,
     questions: validatedFields.data.questions,
     categoryId: validatedFields.data.categoryId,
+    isPublished: validatedFields.data.status === QUIZ_STATUS_ITEM.PUBLISHED,
   });
 
   return {
