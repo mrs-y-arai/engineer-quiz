@@ -50,13 +50,10 @@ export function EditForm({ categories, isPublished, initialQuiz }: Props) {
     handleIsCorrectChange,
     status,
     setStatus,
-  } = useQuestionForm(initialQuiz);
-
-  useEffect(() => {
-    setStatus(
-      isPublished ? QUIZ_STATUS_ITEM.PUBLISHED : QUIZ_STATUS_ITEM.UNPUBLISHED,
-    );
-  }, []);
+  } = useQuestionForm(
+    initialQuiz,
+    isPublished ? QUIZ_STATUS_ITEM.PUBLISHED : QUIZ_STATUS_ITEM.UNPUBLISHED,
+  );
 
   useEffect(() => {
     if (state.quiz) {
