@@ -18,6 +18,7 @@ import { Categories } from '~/types/Category';
 import { useQuestionForm } from '~/hooks/useQuestionForm';
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
 import { QUIZ_STATUS_ITEM } from '~/types/QuizForm';
+import { StatusRadioGroup } from '~/components/QuizFormParts/StatusRadioGroup';
 
 type Props = {
   categories: Categories;
@@ -45,6 +46,7 @@ export function RegisterForm({ categories }: Props) {
     removeQuestion,
     handleIsCorrectChange,
     status,
+    setStatus,
   } = useQuestionForm();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -229,22 +231,11 @@ export function RegisterForm({ categories }: Props) {
               htmlFor="status"
               hasError={!!state.errors?.status?._errors}
             />
-            <RadioGroup defaultValue={status}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value={QUIZ_STATUS_ITEM.PUBLISHED}
-                  id="published"
-                />
-                <Label label="公開" htmlFor="published" />
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value={QUIZ_STATUS_ITEM.UNPUBLISHED}
-                  id="unpublished"
-                />
-                <Label label="非公開" htmlFor="unpublished" />
-              </div>
-            </RadioGroup>
+            <StatusRadioGroup
+              status={status}
+              setStatus={setStatus}
+              errorMessages={state.errors?.status?._errors}
+            />
           </FormItem>
           <SubmitButton />
         </div>

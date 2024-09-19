@@ -5,7 +5,8 @@ export const QUIZ_STATUS_ITEM = {
   UNPUBLISHED: 'unpublished',
 } as const;
 
-type QuizStatus = (typeof QUIZ_STATUS_ITEM)[keyof typeof QUIZ_STATUS_ITEM];
+export type QuizStatus =
+  (typeof QUIZ_STATUS_ITEM)[keyof typeof QUIZ_STATUS_ITEM];
 
 export type QuizFormState = {
   message: string | null;
