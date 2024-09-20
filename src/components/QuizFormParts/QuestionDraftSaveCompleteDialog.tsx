@@ -28,7 +28,7 @@ export function QuestionDraftSaveCompleteDialog({
     <>
       {typeof window === 'undefined' ? null : (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="min-h-[40svh]">
+          <DialogContent className="min-h-[10svh]">
             <DialogHeader>
               <DialogTitle className="text-center">
                 {isRegister ? 'クイズ作成完了！' : 'クイズ更新完了！'}
