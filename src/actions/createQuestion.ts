@@ -79,6 +79,7 @@ export const createQuestion = async (
     quiz: {
       id: result.id,
       title: result.title,
+      isPublished: result.isPublished,
     },
   };
 };

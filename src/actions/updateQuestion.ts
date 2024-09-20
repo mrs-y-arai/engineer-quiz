@@ -89,6 +89,7 @@ export const updateQuestion = async (
     quiz: {
       id: result.id,
       title: result.title,
+      isPublished: result.isPublished,
     },
   };
 };

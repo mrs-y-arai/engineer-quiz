@@ -87,6 +87,7 @@ export const QuizRepository = () => {
       id: data.id,
       title: data.title,
       description: data.description,
+      isPublished: data.is_published,
     };
   };
 

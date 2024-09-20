@@ -103,6 +103,7 @@ export const QuizService = () => {
       ok: true,
       id: quiz.id,
       title: quiz.title,
+      isPublished: quiz.is_published,
     };
   };
 
@@ -179,6 +180,7 @@ export const QuizService = () => {
       ok: true,
       id: quizResult.id,
       title: quizResult.title,
+      isPublished: quizResult.isPublished,
     };
   };
 
