@@ -14,6 +14,7 @@ import {
 } from '~/components/ui/select';
 import { QuestionOption } from '~/components/QuizFormParts/QuestionOption';
 import { QuestionCompleteDialog } from '~/components/QuizFormParts/QuestionCompleteDialog';
+import { QuestionDraftSaveCompleteDialog } from '~/components/QuizFormParts/QuestionDraftSaveCompleteDialog';
 import { Categories } from '~/types/Category';
 import { useQuestionForm } from '~/hooks/useQuestionForm';
 import { StatusRadioGroup } from '~/components/QuizFormParts/StatusRadioGroup';
@@ -48,10 +49,13 @@ export function RegisterForm({ categories }: Props) {
   } = useQuestionForm();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDraftSaveDialogOpen, setIsDraftSaveDialogOpen] = useState(false);
 
   useEffect(() => {
     if (state.quiz) {
-      setIsDialogOpen(true);
+      state.quiz.isPublished
+        ? setIsDialogOpen(true)
+        : setIsDraftSaveDialogOpen(true);
       resetForm();
     }
   }, [state.quiz]);
@@ -243,6 +247,11 @@ export function RegisterForm({ categories }: Props) {
         setIsDialogOpen={setIsDialogOpen}
         isRegister={true}
         quiz={state.quiz}
+      />
+      <QuestionDraftSaveCompleteDialog
+        isDialogOpen={isDraftSaveDialogOpen}
+        setIsDialogOpen={setIsDraftSaveDialogOpen}
+        isRegister={true}
       />
     </>
   );

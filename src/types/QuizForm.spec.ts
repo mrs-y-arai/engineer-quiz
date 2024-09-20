@@ -3,7 +3,7 @@ import { quizFormSchema } from './QuizForm';
 import { QUIZ_STATUS_ITEM } from './QuizForm';
 
 describe('quizFormSchema', () => {
-  it('正常系(errorsが空配列)', () => {
+  it('正常系(公開する。errorsが空配列であること。)', () => {
     // Arrange
     const inputValues = {
       title: 'クイズタイトル',
@@ -32,6 +32,44 @@ describe('quizFormSchema', () => {
         },
       ],
       status: QUIZ_STATUS_ITEM.PUBLISHED,
+    };
+
+    // Act
+    const result = quizFormSchema.safeParse(inputValues);
+
+    // Assert
+    expect(result.success).toBe(true);
+  });
+
+  it('正常系(公開する。errorsが空配列であること。)', () => {
+    // Arrange
+    const inputValues = {
+      title: 'クイズタイトル',
+      description: 'クイズ説明',
+      questions: [
+        {
+          content: '問題文',
+          options: [
+            {
+              content: '選択肢1',
+              isCorrect: 'true',
+            },
+            {
+              content: '選択肢2',
+              isCorrect: null,
+            },
+            {
+              content: '選択肢3',
+              isCorrect: null,
+            },
+            {
+              content: '選択肢4',
+              isCorrect: null,
+            },
+          ],
+        },
+      ],
+      status: QUIZ_STATUS_ITEM.UNPUBLISHED,
     };
 
     // Act
@@ -74,8 +112,6 @@ describe('quizFormSchema', () => {
 
     // Act
     const result = quizFormSchema.safeParse(inputValues);
-
-    console.log(result.error?.errors);
 
     // Assert
     expect(result.success).toBe(false);

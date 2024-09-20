@@ -18,6 +18,7 @@ import { QuizInputValues } from '~/types/QuizInputValues';
 import { QUIZ_STATUS_ITEM } from '~/types/QuizForm';
 import { QuestionOption } from '~/components/QuizFormParts/QuestionOption';
 import { QuestionCompleteDialog } from '~/components/QuizFormParts/QuestionCompleteDialog';
+import { QuestionDraftSaveCompleteDialog } from '~/components/QuizFormParts/QuestionDraftSaveCompleteDialog';
 import { StatusRadioGroup } from '~/components/QuizFormParts/StatusRadioGroup';
 
 type Props = {
@@ -34,6 +35,7 @@ export function EditForm({ categories, isPublished, initialQuiz }: Props) {
 
   const [state, dispatch] = useFormState(updateQuestion, initialState);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDraftSaveDialogOpen, setIsDraftSaveDialogOpen] = useState(false);
 
   const {
     title,
@@ -57,7 +59,9 @@ export function EditForm({ categories, isPublished, initialQuiz }: Props) {
 
   useEffect(() => {
     if (state.quiz) {
-      setIsDialogOpen(true);
+      state.quiz.isPublished
+        ? setIsDialogOpen(true)
+        : setIsDraftSaveDialogOpen(true);
     }
   }, [state.quiz]);
 
@@ -244,6 +248,11 @@ export function EditForm({ categories, isPublished, initialQuiz }: Props) {
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
         quiz={state.quiz}
+        isRegister={false}
+      />
+      <QuestionDraftSaveCompleteDialog
+        isDialogOpen={isDraftSaveDialogOpen}
+        setIsDialogOpen={setIsDraftSaveDialogOpen}
         isRegister={false}
       />
     </>

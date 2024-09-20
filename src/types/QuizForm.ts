@@ -14,6 +14,7 @@ export type QuizFormState = {
   quiz?: {
     id: number;
     title: string;
+    isPublished: boolean;
   };
   errors?: ZodFormattedError<
     {
