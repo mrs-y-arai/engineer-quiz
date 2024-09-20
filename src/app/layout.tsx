@@ -14,6 +14,17 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'みんなのエンジニアクイズ',
   description: 'エンジニアクイズ',
+  openGraph: {
+    title: 'みんなのエンジニアクイズ',
+    description: 'エンジニアクイズ',
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/ogp.png`,
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

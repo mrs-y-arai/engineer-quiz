@@ -1,0 +1,11 @@
+# nodeのバージョン20のイメージを使用
+FROM node:20-alpine
+
+# アプリケーションのディレクトリ
+WORKDIR /app
+
+# 全てコピー
+COPY . .
+
+# 依存関係をインストール
+RUN npm install

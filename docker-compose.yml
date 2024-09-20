@@ -1,0 +1,13 @@
+services:
+  engineer-quiz:
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+    # volumesに以下必要かも
+    # https://zenn.dev/peishim/articles/de0dd58ba89ca8
+    #   - node_modules:/app/node_modules
+    command: sh -c "npm run dev"

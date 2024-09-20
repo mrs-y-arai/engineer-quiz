@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '~/lib/supabase/supabaseServer';
 
-const protectedRoutes = ['/mypage/*'];
-
-const unPublishedRoutes = ['/mypage/quiz-setting/edit'];
+const protectedRoutes = [
+  '/mypage/quiz-setting/register',
+  '/mypage/quiz-setting/edit',
+];
 
 export async function middleware(request: NextRequest) {
-  // 非表示ページアクセス時の設定
-  // if (
-  //   unPublishedRoutes.some((route) =>
-  //     request.nextUrl.pathname.startsWith(route),
-  //   )
-  // ) {
-  //   return NextResponse.redirect(new URL(`/`, request.url));
-  // }
   if (protectedRoutes.includes(request.nextUrl.pathname)) {
     const supabase = createClient();
     const { data, error } = await supabase.auth.getUser();
