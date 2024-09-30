@@ -3,6 +3,8 @@ import { QuizList as QuizListType } from '~/types/Quiz';
 import { Button } from '~/components/ui/button';
 import { Suspense } from 'react';
 import { LoadingUI } from '~/components/Loading/LoadingUI';
+import { unstable_noStore as noStore } from 'next/cache';
+import { QuizService } from '~/server/services/QuizService';
 
 export default async function Home() {
   return (
@@ -42,16 +44,22 @@ export default async function Home() {
 }
 
 async function QuizList() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const response = await fetch(`${baseUrl}/api/quizzes?is-published=true`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    next: { tags: ['getQuizzes'] },
+  noStore();
+  // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  // const response = await fetch(`${baseUrl}/api/quizzes?is-published=true`, {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   next: { tags: ['getQuizzes'] },
+  // });
+  // const responseJson = await response.json();
+  // const quizzes = responseJson.data;
+
+  const quizService = QuizService();
+  const quizzes = await quizService.getAllQuizWithCategory({
+    isPublished: true,
   });
-  const responseJson = await response.json();
-  const quizzes = responseJson.data;
 
   return (
     <>
