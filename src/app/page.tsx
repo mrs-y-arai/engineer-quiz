@@ -62,12 +62,14 @@ async function QuizList() {
               return (
                 <li key={quiz.id} className="border-b">
                   <Link
-                    className="flex items-center justify-between p-4 duration-200 hover:bg-primary/5"
+                    className="flex items-center justify-between gap-x-2 p-4 duration-200 hover:bg-primary/5"
                     href={`/quiz/${quiz.id}`}
                     prefetch={true}
                   >
                     <span className="line-clamp-2">{quiz.title}</span>
-                    {quiz.category && <p>#{quiz.category.name}</p>}
+                    {quiz.category && (
+                      <p className="shrink-0">#{quiz.category.name}</p>
+                    )}
                   </Link>
                 </li>
               );
