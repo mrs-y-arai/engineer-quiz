@@ -63,12 +63,14 @@ async function QuizList() {
               return (
                 <li key={quiz.id} className="border-b">
                   <Link
-                    className="flex items-center justify-between p-4 duration-200 hover:bg-primary/5"
+                    className="flex items-center justify-between gap-x-2 p-4 duration-200 hover:bg-primary/5"
                     href={`/mypage/quiz-setting/edit/${quiz.id}`}
                     prefetch={true}
                   >
                     <span className="line-clamp-2">{quiz.title}</span>
-                    <Button variant="outline">編集する</Button>
+                    <Button className="shrink-0" variant="outline">
+                      編集する
+                    </Button>
                   </Link>
                 </li>
               );
